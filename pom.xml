@@ -37,6 +37,7 @@
         <email.version>2.4.2</email.version>
         <spring-boot-aop.version>2.4.2</spring-boot-aop.version>
         <UserAgentUtils.version>1.21</UserAgentUtils.version>
+        <jjwt.version>0.9.1</jjwt.version>
     </properties>
 
     <dependencyManagement>
@@ -91,6 +92,12 @@
                 <groupId>eu.bitwalker</groupId>
                 <artifactId>UserAgentUtils</artifactId>
                 <version>${UserAgentUtils.version}</version>
+            </dependency>
+            <!-- Jwt令牌 -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${jjwt.version}</version>
             </dependency>
 
         </dependencies>
