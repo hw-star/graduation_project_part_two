@@ -1,0 +1,5 @@
+simbrain:
+  jwt:
+    config:
+      secretKey: simbrain #jwt令牌密钥
+      expires: 604800 #有效时间 7天(默认)
