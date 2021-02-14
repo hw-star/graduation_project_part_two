@@ -1,0 +1,20 @@
+server:
+  port: 10010
+spring:
+  application:
+    name: simbrain-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: simbrain-service
+          uri: http://127.0.0.1:8081
+          predicates:
+            - Path=/**
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://127.0.0.1:10086/eureka
+    registry-fetch-interval-seconds: 5
+  instance:
+    ip-address: true
