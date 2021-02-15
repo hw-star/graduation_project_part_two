@@ -11,7 +11,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  * @description 具体操作
  * @date 2021/2/11
  */
-
 @SpringBootApplication
 @EnableDiscoveryClient
 @MapperScan("cn.simbrain.mapper")

@@ -9,7 +9,6 @@ import cn.simbrain.util.ResultCode;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mysql.jdbc.StringUtils;
 import io.jsonwebtoken.Claims;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

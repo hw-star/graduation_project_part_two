@@ -3,6 +3,7 @@ package cn.simbrain.mapper;
 import cn.simbrain.pojo.Activity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
+import com.baomidou.dynamic.datasource.annotation.DS;
 
 /**
  * @author huowei

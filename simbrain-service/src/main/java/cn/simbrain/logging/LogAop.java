@@ -1,9 +1,14 @@
 package cn.simbrain.logging;
 
+import cn.simbrain.pojo.LogFailure;
+import cn.simbrain.pojo.LogSuccess;
+import cn.simbrain.service.LogService.LogFailureService;
+import cn.simbrain.service.LogService.LogSuccessService;
 import eu.bitwalker.useragentutils.UserAgent;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -23,6 +28,13 @@ import java.util.Arrays;
 @Slf4j
 public class LogAop {
 
+    @Autowired
+    private LogFailureService logFailureService;
+    @Autowired
+    private LogSuccessService logSuccessService;
+
+    private LogFailure logFailure = new LogFailure();
+    private LogSuccess logSuccess = new LogSuccess();
     /**
      *
      * 操作开始时间
@@ -58,16 +70,37 @@ public class LogAop {
         // 获取请求头中的User-Agent
         UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
         startTime = System.currentTimeMillis();
-        log.info("-----------------------------------------------------------------");
-        log.info("请求开始时间：{}", LocalDateTime.now());
-        log.info("请求Url : {}", request.getRequestURL().toString());
-        log.info("请求方式 : {}", request.getMethod());
-        log.info("请求ip : {}", request.getRemoteAddr());
-        log.info("请求方法 : {}", joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
-        log.info("请求参数 : {}", Arrays.toString(joinPoint.getArgs()));
-        log.info("浏览器：{}", userAgent.getBrowser().toString());
-        log.info("浏览器版本：{}", userAgent.getBrowserVersion());
-        log.info("操作系统: {}", userAgent.getOperatingSystem().toString());
+        try{
+            // 请求开始时间
+            logSuccess.setStartTime(LocalDateTime.now().toString());
+            // 请求Url
+            logSuccess.setRequestUrl(request.getRequestURL().toString());
+            // 请求方式
+            logSuccess.setRequestMethod(request.getMethod());
+            // 请求ip
+            logSuccess.setRequestIp(request.getRemoteAddr());
+            // 请求方法
+            logSuccess.setRequestSignature(joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
+            // 请求参数
+            logSuccess.setRequestParam(Arrays.toString(joinPoint.getArgs()));
+            // 浏览器
+            logSuccess.setRequestBrowser(userAgent.getBrowser().toString());
+            // 操作系统
+            logSuccess.setRequestSystem(userAgent.getOperatingSystem().toString());
+
+
+            logFailure.setStartTime(LocalDateTime.now().toString());
+            logFailure.setRequestUrl(request.getRequestURL().toString());
+            logFailure.setRequestMethod(request.getMethod());
+            logFailure.setRequestIp(request.getRemoteAddr());
+            logFailure.setRequestSignature(joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
+            logFailure.setRequestParam(Arrays.toString(joinPoint.getArgs()));
+            logFailure.setRequestBrowser(userAgent.getBrowser().toString());
+            logFailure.setRequestSystem(userAgent.getOperatingSystem().toString());
+        }catch (Exception e){
+
+        }
+
     }
 
     /**
@@ -78,9 +111,13 @@ public class LogAop {
     @AfterReturning(returning = "ret", pointcut = "LogAopPointcut()")
     public void doAfterReturning(Object ret) throws Throwable {
         endTime = System.currentTimeMillis();
-        log.info("请求结束时间：{}", LocalDateTime.now());
-        log.info("请求耗时：{}", (endTime - startTime));
-        log.info("请求返回 : {}", ret);
+        // 请求结束时间
+        logSuccess.setRequestTime(LocalDateTime.now().toString());
+        // 请求耗时
+        logSuccess.setFinishTime(Long.toString(endTime - startTime));
+        // 请求返回
+        logSuccess.setRequestResult(ret.toString());
+        logSuccessService.insertMsg(logSuccess);
     }
 
     /**
@@ -91,11 +128,10 @@ public class LogAop {
     @AfterThrowing(value = "LogAopPointcut()", throwing = "throwable")
     public void doAfterThrowing(Throwable throwable) {
         // 异常日志记录
-        log.error("-----------------------------------------------------------------");
-        log.error("发生异常时间：{}", LocalDateTime.now());
-        log.error("抛出异常：{}", throwable.getMessage());
-        log.error("-----------------------------------------------------------------");
-
+        // 发生异常时间
+        logFailure.setErrorTime(LocalDateTime.now().toString());
+        // 抛出异常
+        logFailure.setErrorMessage(throwable.getMessage());
+        logFailureService.insertMsg(logFailure);
     }
-
 }

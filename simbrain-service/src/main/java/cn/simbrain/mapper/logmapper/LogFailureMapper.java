@@ -1,6 +1,6 @@
-package cn.simbrain.mapper;
+package cn.simbrain.mapper.logmapper;
 
-import cn.simbrain.pojo.User;
+import cn.simbrain.pojo.LogFailure;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
@@ -8,9 +8,10 @@ import org.springframework.stereotype.Repository;
 /**
  * @author huowei
  * @version 1.0.0
- * @description  用户持久层
- * @date 2021/2/10
+ * @description 日志持久层
+ * @date 2021/2/15
  */
 @Repository
-public interface UserMapper extends BaseMapper<User> {
+@DS("slave")
+public interface LogFailureMapper extends BaseMapper<LogFailure> {
 }
