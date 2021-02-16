@@ -3,10 +3,15 @@ server:
 spring:
   application:
     name: simbrain-registry
+  security:
+    user:
+      name: simbrain
+      password: huowei
+      roles: SERVICE_NODE
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://127.0.0.1:10086/eureka
+      defaultZone: http://simbrain:huowei@127.0.0.1:10086/eureka
     register-with-eureka: false
     fetch-registry: false
   server:
