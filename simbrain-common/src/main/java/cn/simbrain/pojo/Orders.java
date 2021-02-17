@@ -37,10 +37,4 @@ public class Orders {
      */
     @Version
     private Integer version;
-    /**
-     *
-     * 逻辑删除
-     */
-    @TableLogic
-    private Integer deleted;
 }

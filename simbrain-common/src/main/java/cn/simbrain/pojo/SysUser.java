@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 /**
  * @author huowei
  * @version 1.0.0
@@ -58,4 +60,16 @@ public class SysUser {
      */
     @TableLogic
     private Integer deleted;
+    /**
+     * 管理员创建时间
+     * 自动填写管理员创建时间
+     */
+    @TableField(fill = FieldFill.INSERT)
+    private Date sysCreate;
+    /**
+     * 管理员更新时间
+     * 自动更新管理员修改时间
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private Date sysUpdate;
 }

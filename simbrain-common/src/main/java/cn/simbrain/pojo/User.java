@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 /**
  * @author huowei
  * @version 1.0.0
@@ -58,4 +60,16 @@ public class User {
      */
     @TableLogic
     private Integer deleted;
+    /**
+     * 用户创建时间
+     * 自动填写用户创建时间
+     */
+    @TableField(fill = FieldFill.INSERT)
+    private Date userCreate;
+    /**
+     * 用户更新时间
+     * 自动更新用户修改时间
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private Date userUpdate;
 }
