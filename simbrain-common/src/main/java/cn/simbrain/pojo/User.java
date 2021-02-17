@@ -1,13 +1,9 @@
 package cn.simbrain.pojo;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.Version;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
 
 /**
  * @author huowei
@@ -18,42 +14,37 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User implements Serializable {
-
+public class User {
     /**
      *
      * 主键 ID
      */
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
     /**
      *
      * 用户账号
      */
-    @TableField("user_id")
-    private Long userId;
+    private String userId;
     /**
      *
      * 用户密码
      */
-    @TableField("user_pwd")
     private String userPwd;
     /**
      * 用户邮箱
      * 忘记密码使用
      */
-    @TableField("user_email")
     private String userEmail;
     /**
      *
      * 用户性别
      */
-    @TableField("user_sex")
     private Integer userSex;
     /**
      *
      * 用户名字
      */
-    @TableField("user_name")
     private String userName;
     /**
      *

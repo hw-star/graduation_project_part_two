@@ -40,11 +40,11 @@ public class Jwt {
      * @Param isLogin: 是否登录
      * @return: java.lang.String
      */
-    public String createJwt(String id, String name, Boolean isLogin){
+    public String createJwt(String id, String userId, Boolean isLogin){
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
         JwtBuilder jwtBuilder = Jwts.builder().setId(id)
-                .setSubject(name)
+                .setSubject(userId)
                 .setIssuedAt(now)
                 .signWith(SignatureAlgorithm.HS256,secretKey)
                 .claim("isLogin",isLogin);

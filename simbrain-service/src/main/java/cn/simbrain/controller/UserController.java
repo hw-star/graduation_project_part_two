@@ -3,6 +3,7 @@ package cn.simbrain.controller;
 import cn.simbrain.mapper.UserMapper;
 import cn.simbrain.pojo.User;
 import cn.simbrain.provide.EmailProvide;
+import cn.simbrain.service.UserService;
 import cn.simbrain.util.Jwt;
 import cn.simbrain.util.Result;
 import cn.simbrain.util.ResultCode;
@@ -68,26 +69,34 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Result userLogin(@RequestParam("id") Long userIdL,@RequestParam("pwd") String userPwd){
-        String userId = String.valueOf(userIdL);
+    public Result userLogin(@RequestParam("id") String userId,@RequestParam("pwd") String userPwd){
         if (StringUtils.isNullOrEmpty(userId) || StringUtils.isNullOrEmpty(userPwd)){
             return Result.failure(ResultCode.USER_LOGIN_ERROR);
         }
         QueryWrapper<User> wrapper = new QueryWrapper<>();
-        wrapper.ge("user_id",userId);
+        wrapper.eq("user_id",userId);
         User user = userMapper.selectOne(wrapper);
         if (user == null){
             return Result.failure(ResultCode.USER_LOGIN_ERROR);
         }
         if (userPwd.equals(user.getUserPwd())){
-            String token = jwt.createJwt(userId,user.getUserName(),true);
+            String token = jwt.createJwt(user.getId().toString(),userId,true);
             Map<String,String> map = new HashMap<>();
             map.put("token",token);
             Claims claims = jwt.parseJwt(token);
-            map.put("解析出的账号",claims.getId());
-            map.put("解析出的名字",claims.getSubject());
+            map.put("解析出的ID",claims.getId());
+            map.put("解析出的账号",claims.getSubject());
             return Result.success(map);
         }
         return Result.failure(ResultCode.USER_LOGIN_ERROR);
+    }
+
+    @PutMapping("/register")
+    public Result insertUser(User user){
+        int result = userMapper.insert(user);
+        if (result > 0){
+            return Result.success();
+        }
+        return Result.failure(ResultCode.USER_HAS_EXISTED);
     }
 }

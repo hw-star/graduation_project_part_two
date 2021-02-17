@@ -5,10 +5,7 @@ import cn.simbrain.pojo.Activity;
 import cn.simbrain.util.Result;
 import cn.simbrain.util.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author huowei
@@ -34,5 +31,13 @@ public class ActivityController {
         if (activity != null)
             return Result.success(activity);
         return Result.failure(ResultCode.DATA_NONE);
+    }
+
+    @PutMapping("/addactivity")
+    public Result setActivity(Activity activity){
+         int result = activityMapper.insert(activity);
+         if (result > 0)
+             return Result.success();
+         return Result.failure(ResultCode.USER_HAS_EXISTED);
     }
 }

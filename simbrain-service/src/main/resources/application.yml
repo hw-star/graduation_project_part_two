@@ -11,6 +11,8 @@ eureka:
 info:
   app.name: 毕业设计-NUC-霍伟
 mybatis-plus:
+  # configuration:
+  #  log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     db-config:
       logic-delete-field: flag
