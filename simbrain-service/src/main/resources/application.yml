@@ -21,6 +21,9 @@ mybatis-plus:
 spring:
   application:
     name: simbrain-service
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
   mail:
     username: 3111314916@qq.com
     password: gmpqfnygpvzxdgah
