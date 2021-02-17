@@ -91,7 +91,7 @@ public class UserController {
         return Result.failure(ResultCode.USER_LOGIN_ERROR);
     }
 
-    @PutMapping("/register")
+    @PostMapping("/register")
     public Result insertUser(User user){
         int result = userMapper.insert(user);
         if (result > 0){

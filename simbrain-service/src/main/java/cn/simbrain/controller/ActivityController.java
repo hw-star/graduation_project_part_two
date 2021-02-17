@@ -33,7 +33,7 @@ public class ActivityController {
         return Result.failure(ResultCode.DATA_NONE);
     }
 
-    @PutMapping("/addactivity")
+    @PostMapping("/addactivity")
     public Result setActivity(Activity activity){
          int result = activityMapper.insert(activity);
          if (result > 0)
