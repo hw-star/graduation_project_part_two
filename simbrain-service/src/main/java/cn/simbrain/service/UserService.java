@@ -1,8 +1,7 @@
 package cn.simbrain.service;
 
-import cn.simbrain.mapper.UserMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import cn.simbrain.pojo.User;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * @author huowei
@@ -10,9 +9,5 @@ import org.springframework.stereotype.Service;
  * @description 用户服务层
  * @date 2021/2/14
  */
-@Service
-public class UserService {
-
-    @Autowired
-    private UserMapper userMapper;
+public interface UserService extends IService<User> {
 }
