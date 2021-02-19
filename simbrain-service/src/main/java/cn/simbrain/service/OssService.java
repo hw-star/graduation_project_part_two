@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @description TODO
  * @date 2021/2/19
  */
-public interface OssService {
+public interface OssService{
 
     String addFileAvatar(MultipartFile multipartFile);
 }
