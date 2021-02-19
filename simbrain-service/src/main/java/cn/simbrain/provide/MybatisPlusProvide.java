@@ -2,6 +2,7 @@ package cn.simbrain.provide;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
@@ -22,5 +23,10 @@ public class MybatisPlusProvide {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.H2));
         return interceptor;
+    }
+
+    @Bean
+    public OptimisticLockerInterceptor OptimisticLockerInnerInterceptor() {
+        return new OptimisticLockerInterceptor();
     }
 }

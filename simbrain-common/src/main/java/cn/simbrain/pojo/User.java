@@ -20,7 +20,7 @@ public class User {
      *
      * 主键 ID
      */
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId(type = IdType.INPUT)
     private Long id;
     /**
      *

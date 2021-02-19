@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mysql.jdbc.StringUtils;
 import io.jsonwebtoken.Claims;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
@@ -113,5 +114,65 @@ public class SysUserController {
         return Result.success(map);
     }
 
+    /**
+     * @description: 管理员删除用户
+     * @Param id: 用户ID
+     * @return: cn.simbrain.util.Result
+     */
+    @DeleteMapping("/deleteuser/{id}")
+    public Result deletedUser(@PathVariable String id){
+        boolean res = userService.removeById(id);
+        if (res)
+            return Result.success();
+        return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
+    }
+
+    /**
+     * @description: 管理员新增用户
+     * @Param user: 用户实体
+     * @return: cn.simbrain.util.Result
+     */
+    @PostMapping("adduser")
+    public Result addUser(@RequestBody User user){
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.eq("user_id",user.getUserId().trim());
+        User userInSql = userService.getOne(wrapper);
+        if (userInSql != null)
+            return Result.failure(ResultCode.USER_HAS_EXISTED);
+        boolean res = userService.save(user);
+        if (res)
+            return Result.success();
+        return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
+    }
+
+    /**
+     * @description: 管理员查询某个用户
+     * @Param id: ID
+     * @return: cn.simbrain.util.Result
+     */
+    @GetMapping("/getuser/{id}")
+    public Result getUser(@PathVariable String id){
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.eq("id",id.trim());
+        User user = userService.getOne(wrapper);
+        if (user == null)
+            return Result.failure(ResultCode.DATA_NONE);
+        return Result.success(user);
+    }
+
+    /**
+     * @description: 管理员更新用户
+     * @Param user: 用户实体类
+     * @return: cn.simbrain.util.Result
+     */
+    @PostMapping("/updateuser")
+    public Result updateUser(@RequestBody User user){
+        User userInSql = userService.getById(user.getId());
+        user.setUserId(userInSql.getUserId());
+        boolean res = userService.updateById(user);
+        if (res)
+            return Result.success();
+        return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
+    }
 
 }
