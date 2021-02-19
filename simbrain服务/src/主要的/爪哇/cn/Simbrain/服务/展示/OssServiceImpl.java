@@ -21,8 +21,8 @@ public class OssServiceImpl implements OssService {
     @Override
     public String addFileAvatar(MultipartFile multipartFile) {
         String endpoint = "http://oss-cn-beijing.aliyuncs.com";
-        String accessKeyId = "LTAI4G35aBYNbtoykwQt51ef";
-        String accessKeySecret = "ML1FkRzq0Den6FiEqC8OgQnyeLaJx3";
+        String accessKeyId = "";
+        String accessKeySecret = "";
         OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
         InputStream inputStream = null;
         String url = "";
