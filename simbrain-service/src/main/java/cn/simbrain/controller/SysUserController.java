@@ -7,6 +7,7 @@ import cn.simbrain.service.UserService;
 import cn.simbrain.util.Jwt;
 import cn.simbrain.util.Result;
 import cn.simbrain.util.ResultCode;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -57,16 +58,31 @@ public class SysUserController {
         Map<String,String> map = new HashMap<>();
         map.put("roles","admin");
         map.put("name","admin");
-        map.put("avator","https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.ewebweb.com%2Fuploads%2F20191230%2F14%2F1577685866-JkUhPyKGrQ.jpg&refer=http%3A%2F%2Fimg.ewebweb.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1616227476&t=db7813e637e645b438e53bf6b34b1918");
+        map.put("avatar","https://youngvolunteer.oss-cn-beijing.aliyuncs.com/common.gif");
         return Result.success(map);
     }
 
     @GetMapping("userlist/{current}/{limit}")
     public Result getUsersListPage(@PathVariable long current,
-                                   @PathVariable long limit){
+                                   @PathVariable long limit,
+                                   @RequestParam(value = "fuzzyquery",required = false) String fuzzyquery){
         Page<User> userPage = new Page<>(current,limit);
-        //调用方法实现条件查询分页
-        userService.page(userPage,null);
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        if (!"".equals(fuzzyquery)){
+            if ("男".equals(fuzzyquery)){
+                wrapper.eq("user_sex",1);
+            }else if("女".equals(fuzzyquery)){
+                wrapper.eq("user_sex",0);
+            }
+            wrapper
+                    .or().like("user_id",fuzzyquery)
+                    .or().like("user_pwd",fuzzyquery)
+                    .or().like("user_email",fuzzyquery)
+                    .or().like("user_name",fuzzyquery);
+
+        }
+        wrapper.orderByDesc("user_create");
+        userService.page(userPage,wrapper);
         long total = userPage.getTotal();
         List<User> records = userPage.getRecords();
         Map<String,Object> map = new HashMap<>();

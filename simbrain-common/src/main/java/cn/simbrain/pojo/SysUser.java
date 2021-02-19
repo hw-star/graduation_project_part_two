@@ -72,4 +72,9 @@ public class SysUser {
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date sysUpdate;
+    /**
+     *
+     * 管理员头像
+     */
+    private String sysAvatar;
 }

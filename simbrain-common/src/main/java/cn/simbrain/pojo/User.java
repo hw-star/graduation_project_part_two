@@ -72,4 +72,9 @@ public class User {
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date userUpdate;
+    /**
+     *
+     * 用户头像
+     */
+    private String userAvatar;
 }

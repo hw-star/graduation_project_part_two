@@ -8,6 +8,7 @@ import eu.bitwalker.useragentutils.UserAgent;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -72,7 +73,7 @@ public class LogAop {
         startTime = System.currentTimeMillis();
         try{
             // 请求开始时间
-            logSuccess.setStartTime(LocalDateTime.now().toString());
+            logSuccess.setStartTime(new DateTime().toString("yyyy-MM-dd HH:mm:ss"));
             // 请求Url
             logSuccess.setRequestUrl(request.getRequestURL().toString());
             // 请求方式
@@ -89,7 +90,7 @@ public class LogAop {
             logSuccess.setRequestSystem(userAgent.getOperatingSystem().toString());
 
 
-            logFailure.setStartTime(LocalDateTime.now().toString());
+            logFailure.setStartTime(new DateTime().toString("yyyy-MM-dd HH:mm:ss"));
             logFailure.setRequestUrl(request.getRequestURL().toString());
             logFailure.setRequestMethod(request.getMethod());
             logFailure.setRequestIp(request.getRemoteAddr());
@@ -112,7 +113,7 @@ public class LogAop {
     public void doAfterReturning(Object ret) throws Throwable {
         endTime = System.currentTimeMillis();
         // 请求结束时间
-        logSuccess.setRequestTime(LocalDateTime.now().toString());
+        logSuccess.setRequestTime(new DateTime().toString("yyyy-MM-dd HH:mm:ss"));
         // 请求耗时
         logSuccess.setFinishTime(Long.toString(endTime - startTime));
         // 请求返回
@@ -122,14 +123,14 @@ public class LogAop {
 
     /**
      * @description: 异常
-     * @Param throwable:
+     * @Param throwable: 捕获异常
      * @return: void
      */
     @AfterThrowing(value = "LogAopPointcut()", throwing = "throwable")
     public void doAfterThrowing(Throwable throwable) {
         // 异常日志记录
         // 发生异常时间
-        logFailure.setErrorTime(LocalDateTime.now().toString());
+        logFailure.setErrorTime(new DateTime().toString("yyyy-MM-dd HH:mm:ss"));
         // 抛出异常
         logFailure.setErrorMessage(throwable.getMessage());
         logFailureService.insertMsg(logFailure);

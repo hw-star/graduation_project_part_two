@@ -3,6 +3,7 @@ package cn.simbrain.controller;
 import cn.simbrain.mapper.UserMapper;
 import cn.simbrain.pojo.User;
 import cn.simbrain.provide.EmailProvide;
+import cn.simbrain.service.OssService;
 import cn.simbrain.service.UserService;
 import cn.simbrain.util.Jwt;
 import cn.simbrain.util.Result;
@@ -12,6 +13,7 @@ import com.mysql.jdbc.StringUtils;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
