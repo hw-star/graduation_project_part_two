@@ -1,8 +1,7 @@
 package cn.simbrain.service;
 
-import cn.simbrain.mapper.SysUserMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import cn.simbrain.pojo.SysUser;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * @author huowei
@@ -10,9 +9,5 @@ import org.springframework.stereotype.Service;
  * @description 管理员服务层
  * @date 2021/2/14
  */
-@Service
-public class SysUserService {
-
-    @Autowired
-    private SysUserMapper sysUserMapper;
+public interface SysUserService extends IService<SysUser> {
 }

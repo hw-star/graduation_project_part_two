@@ -76,7 +76,7 @@ public class UserController {
             return Result.failure(ResultCode.USER_LOGIN_ERROR);
         }
         QueryWrapper<User> wrapper = new QueryWrapper<>();
-        wrapper.eq("user_id",userId);
+        wrapper.eq("user_id",userId.trim());
         User user = userMapper.selectOne(wrapper);
         if (user == null){
             return Result.failure(ResultCode.USER_LOGIN_ERROR);

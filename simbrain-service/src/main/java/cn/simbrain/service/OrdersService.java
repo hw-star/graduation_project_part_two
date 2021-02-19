@@ -1,8 +1,7 @@
 package cn.simbrain.service;
 
-import cn.simbrain.mapper.OrdersMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import cn.simbrain.pojo.Orders;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * @author huowei
@@ -10,9 +9,5 @@ import org.springframework.stereotype.Service;
  * @description 申请到活动的服务层
  * @date 2021/2/14
  */
-@Service
-public class OrdersService {
-
-    @Autowired
-    private OrdersMapper ordersMapper;
+public interface OrdersService extends IService<Orders> {
 }
