@@ -12,7 +12,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mysql.jdbc.StringUtils;
 import io.jsonwebtoken.Claims;
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
@@ -53,10 +52,10 @@ public class SysUserController {
         if (sysUser == null){
             return Result.failure(ResultCode.USER_LOGIN_ERROR);
         }
-        if (sysUserLogin.getSysUserLoginPwd().equals(sysUser.getSysPwd())){
-            String token = jwt.createJwt(sysUser.getId().toString(),sysUserLogin.getSysUserLoginId(),true);
-            Map<String,String> map = new HashMap<>();
-            map.put("token",token);
+        if (sysUserLogin.getSysUserLoginPwd().equals(sysUser.getSysPwd())) {
+            String token = jwt.createJwt(sysUser.getId().toString(), sysUserLogin.getSysUserLoginId(), true);
+            Map<String, String> map = new HashMap<>();
+            map.put("token", token);
             return Result.success(map);
         }
         return Result.failure(ResultCode.USER_LOGIN_ERROR);
@@ -97,7 +96,8 @@ public class SysUserController {
                 wrapper.eq("user_sex",1);
             }else if("女".equals(fuzzyquery)){
                 wrapper.eq("user_sex",0);
-            }
+            }else if ("禁用".equals(fuzzyquery))
+                wrapper.eq("user_stop",1);
             wrapper
                     .or().like("user_id",fuzzyquery)
                     .or().like("user_pwd",fuzzyquery)
@@ -174,5 +174,23 @@ public class SysUserController {
             return Result.success();
         return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
     }
+
+    /**
+     * @description: 禁用某个用户
+     * @Param id: 用户ID
+     * @Param stateCode: 禁用状态
+     * @return: cn.simbrain.util.Result
+     */
+    @GetMapping("/stopuser/{id}/{stateCode}")
+    public Result stopUser(@PathVariable String id,
+                           @PathVariable Integer stateCode){
+        User user = userService.getById(id);
+        user.setUserStop(stateCode);
+        boolean res = userService.updateById(user);
+        if (res)
+            return Result.success();
+        return Result.failure(ResultCode.INTERFACE_REQUEST_TIMEOUT);
+    }
+
 
 }

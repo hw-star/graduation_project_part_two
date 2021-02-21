@@ -2,6 +2,8 @@ package cn.simbrain.service;
 
 
 import cn.simbrain.pojo.Activity;
+import cn.simbrain.pojo.ActivityBody;
+import cn.simbrain.util.Result;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,4 +13,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @date 2021/2/14
  */
 public interface ActivityService extends IService<Activity> {
+
+    /**
+     * @description: 条件查询带分页查询的功能
+     * @Param current: 当前第几页
+     * @Param limit: 每页数量
+     * @return: cn.simbrain.util.Result 
+     */
+    Result getUsersListPage(long current,long limit);
+    Result getUsersListPage(long current, long limit, ActivityBody activityBody);
 }

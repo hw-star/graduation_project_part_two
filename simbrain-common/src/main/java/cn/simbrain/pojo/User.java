@@ -76,4 +76,9 @@ public class User {
      * 用户头像
      */
     private String userAvatar;
+    /**
+     *
+     * 用户状态(是否禁用)
+     */
+    private Integer userStop;
 }

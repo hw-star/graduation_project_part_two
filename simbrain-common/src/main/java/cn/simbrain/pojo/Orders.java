@@ -28,6 +28,11 @@ public class Orders {
     private String orId;
     /**
      *
+     * 申请某活动的活动号
+     */
+    private String orAcid;
+    /**
+     *
      * 申请某活动的用户名字
      */
     private String orName;
@@ -37,4 +42,9 @@ public class Orders {
      */
     @Version
     private Integer version;
+    /**
+     *
+     * 用户邮箱
+     */
+    private String orEmail;
 }

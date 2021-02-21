@@ -77,4 +77,9 @@ public class SysUser {
      * 管理员头像
      */
     private String sysAvatar;
+    /**
+     *
+     * 管理员状态(是否禁用)
+     */
+    private Integer sysStop;
 }
