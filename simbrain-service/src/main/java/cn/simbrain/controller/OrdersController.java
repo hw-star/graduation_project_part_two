@@ -1,17 +1,13 @@
 package cn.simbrain.controller;
 
-import cn.simbrain.mapper.OrdersMapper;
 import cn.simbrain.pojo.Orders;
-import cn.simbrain.pojo.User;
 import cn.simbrain.service.OrdersService;
 import cn.simbrain.util.Result;
+import cn.simbrain.util.ResultCode;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import jdk.nashorn.internal.objects.annotations.ScriptClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import javax.ws.rs.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +33,6 @@ public class OrdersController {
                                     @RequestParam(value = "fuzzyquery",required = false) String fuzzyquery){
         Page<Orders> ordersPage = new Page<>(current,limit);
         QueryWrapper<Orders> wrapper = new QueryWrapper<>();
-        QueryWrapper<Orders> wrapperForApplyed = new QueryWrapper<>();
         if (!"".equals(fuzzyquery)){
             wrapper
                     .or().like("or_id",fuzzyquery)
@@ -45,8 +40,7 @@ public class OrdersController {
                     .or().like("or_name",fuzzyquery);
         }
         wrapper.eq("or_acid",id);
-        wrapperForApplyed.eq("or_acid",id);
-        int number = ordersService.count(wrapperForApplyed);
+        int number = ordersService.count(new QueryWrapper<Orders>().eq("or_acid",id));
         ordersService.page(ordersPage,wrapper);
         long total = ordersPage.getTotal();
         List<Orders> records = ordersPage.getRecords();
@@ -55,5 +49,13 @@ public class OrdersController {
         map.put("ordersdata",records);
         map.put("applyed",number);
         return Result.success(map);
+    }
+
+    @DeleteMapping("/deleteorder/{id}")
+    public Result deletedOrders(@PathVariable String id){
+        boolean res = ordersService.removeById(id);
+        if (res)
+            return Result.success();
+        return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
     }
 }

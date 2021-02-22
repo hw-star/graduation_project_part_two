@@ -37,7 +37,7 @@ public class OssServiceImpl implements OssService {
             inputStream = multipartFile.getInputStream();
             ossClient.putObject("youngvolunteer", fileName, inputStream);
             ossClient.shutdown();
-            url = "https://youngvolunteer.oss-cn-beijing.aliyuncs.com/" + fileName;
+            url = "https://youngvolunteer.oss-cn-beijing.aliyuncs.com"+ "/" + fileName;
         } catch (Exception e) {
 
         }

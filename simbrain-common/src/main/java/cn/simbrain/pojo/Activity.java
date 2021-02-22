@@ -46,11 +46,6 @@ public class Activity {
     private Integer actNumber;
     /**
      *
-     * 活动已报人数
-     */
-    private Integer actNumbered;
-    /**
-     *
      * 活动描述
      */
     private String actDescription;
@@ -66,4 +61,9 @@ public class Activity {
      */
     @TableLogic
     private Integer deleted;
+    /**
+     *
+     * 是否启用
+     */
+    private Integer actActive;
 }

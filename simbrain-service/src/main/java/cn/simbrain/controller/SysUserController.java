@@ -192,5 +192,14 @@ public class SysUserController {
         return Result.failure(ResultCode.INTERFACE_REQUEST_TIMEOUT);
     }
 
+    /**
+     * @description: 管理员退出
+     * @Param token: jwtt令牌
+     * @return: cn.simbrain.util.Result
+     */
+    @PostMapping("/logout")
+    public Result sysUserLogOut(){
+        return Result.success();
+    }
 
 }

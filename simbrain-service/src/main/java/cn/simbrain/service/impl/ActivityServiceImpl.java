@@ -46,12 +46,10 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityMapper, Activity> i
         String fuzzyquery = activityBody.getFuzzyquery();
         String begin = activityBody.getBegin();
         String end = activityBody.getEnd();
-        if (begin != null){
+        if (begin != null)
             wrapper.ge("act_create",begin);
-        }
-        if (end != null){
+        if (end != null)
             wrapper.le("act_create",end);
-        }
         if (begin != null && end != null){
             if (fuzzyquery != null){
                 if (StringUtils.isNumeric(fuzzyquery)){
@@ -76,4 +74,6 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityMapper, Activity> i
         map.put("activitydata",records);
         return Result.success(map);
     }
+
+
 }
