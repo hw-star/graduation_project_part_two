@@ -2,6 +2,7 @@ package cn.simbrain.controller;
 
 import cn.simbrain.mapper.UserMapper;
 import cn.simbrain.pojo.User;
+import cn.simbrain.pojo.login.UserLogin;
 import cn.simbrain.provide.EmailProvide;
 import cn.simbrain.util.Jwt;
 import cn.simbrain.util.Result;
@@ -21,6 +22,7 @@ import java.util.Map;
  * @description 用户控制层
  * @date 2021/2/11
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -44,17 +46,6 @@ public class UserController {
             return Result.success(user);
         return Result.failure(ResultCode.USER_LOGIN_ERROR);
     }
-
-    /**
-     * @description: 测试
-     * @return: java.lang.String
-     */
-    @RequestMapping("/test")
-    public Result Test(){
-        return Result.success("hello world");
-    }
-
-
     /**
      * @description: 测试用户找回密码(邮箱发送密码方式)
      * @return: cn.simbrain.util.Result
@@ -68,23 +59,23 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Result userLogin(@RequestParam("id") String userId,@RequestParam("pwd") String userPwd){
-        if (StringUtils.isNullOrEmpty(userId) || StringUtils.isNullOrEmpty(userPwd)){
+    public Result userLogin(@RequestBody UserLogin userLogin){
+        if (StringUtils.isNullOrEmpty(userLogin.getUserLoginId()) || StringUtils.isNullOrEmpty(userLogin.getUserLoginPwd())){
             return Result.failure(ResultCode.USER_LOGIN_ERROR);
         }
         QueryWrapper<User> wrapper = new QueryWrapper<>();
-        wrapper.eq("user_id",userId.trim());
+        wrapper.eq("user_id",userLogin.getUserLoginId().trim());
         User user = userMapper.selectOne(wrapper);
         if (user == null){
             return Result.failure(ResultCode.USER_LOGIN_ERROR);
         }
-        if (userPwd.equals(user.getUserPwd())){
-            String token = jwt.createJwt(user.getId().toString(),userId,true);
+        if (userLogin.getUserLoginPwd().equals(user.getUserPwd())){
+            String token = jwt.createJwt(user.getId().toString(),user.getUserId(),true);
             Map<String,String> map = new HashMap<>();
             map.put("token",token);
-            Claims claims = jwt.parseJwt(token);
+            /*Claims claims = jwt.parseJwt(token);
             map.put("解析出的ID",claims.getId());
-            map.put("解析出的账号",claims.getSubject());
+            map.put("解析出的账号",claims.getSubject());*/
             return Result.success(map);
         }
         return Result.failure(ResultCode.USER_LOGIN_ERROR);
