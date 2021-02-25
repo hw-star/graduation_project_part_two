@@ -7,10 +7,11 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 /**
  * @author huowei
@@ -20,18 +21,16 @@ import java.util.Date;
  */
 @Component
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@ConfigurationProperties("simbrain.jwt.config")
+// @ConfigurationProperties("simbrain.jwt.config")
 public class Jwt {
     /**
      * 密钥
      */
-    private String secretKey = "simbrain";
+    private static String secretKey = "SimBrain0510";
     /**
      * 令牌有效时间(默认7天)
      */
-    private long expires = 60 * 60 * 24 * 7;
+    private static long expires = 60 * 60 * 24 * 7;
 
     /**
      * @description: 生成令牌
@@ -40,7 +39,7 @@ public class Jwt {
      * @Param isLogin: 是否登录
      * @return: java.lang.String
      */
-    public String createJwt(String id, String userId, Boolean isLogin){
+    public static String createJwt(String id, String userId, Boolean isLogin){
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
         JwtBuilder jwtBuilder = Jwts.builder().setId(id)
@@ -54,8 +53,19 @@ public class Jwt {
         return jwtBuilder.compact();
     }
 
-    public Claims parseJwt(String jwtToken){
+    public static Claims parseJwt(String jwtToken){
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken).getBody();
+    }
+
+    public static boolean checkToken(String jwtToken) {
+        if(isEmpty(jwtToken)) return false;
+        try {
+            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
 

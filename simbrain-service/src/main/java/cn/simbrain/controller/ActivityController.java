@@ -2,12 +2,9 @@ package cn.simbrain.controller;
 
 import cn.simbrain.pojo.Activity;
 import cn.simbrain.pojo.ActivityBody;
-import cn.simbrain.pojo.User;
 import cn.simbrain.service.ActivityService;
 import cn.simbrain.util.Result;
 import cn.simbrain.util.ResultCode;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.junit.platform.commons.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
  * @description 活动控制层
  * @date 2021/2/12
  */
-@CrossOrigin
 @RestController
 @RequestMapping("/activity")
 public class ActivityController {

@@ -24,7 +24,6 @@ import java.util.Map;
  * @description 管理员控制层
  * @date 2021/2/12
  */
-@CrossOrigin
 @RestController
 @RequestMapping("/sysuser")
 public class SysUserController {
@@ -33,8 +32,6 @@ public class SysUserController {
     private SysUserService sysUserService;
     @Autowired
     private UserService userService;
-    @Autowired
-    private Jwt jwt;
 
     /**
      * @description: 管理员登录功能
@@ -53,7 +50,7 @@ public class SysUserController {
             return Result.failure(ResultCode.USER_LOGIN_ERROR);
         }
         if (sysUserLogin.getSysUserLoginPwd().equals(sysUser.getSysPwd())) {
-            String token = jwt.createJwt(sysUser.getId().toString(), sysUserLogin.getSysUserLoginId(), true);
+            String token = Jwt.createJwt(sysUser.getId().toString(), sysUserLogin.getSysUserLoginId(), true);
             Map<String, String> map = new HashMap<>();
             map.put("token", token);
             return Result.success(map);
@@ -68,7 +65,7 @@ public class SysUserController {
      */
     @GetMapping("/info")
     public Result getInfo(@RequestParam("token") String token){
-        Claims claims = jwt.parseJwt(token);
+        Claims claims = Jwt.parseJwt(token);
         Map<String,String> map = new HashMap<>();
         map.put("roles","admin");
         map.put("name","admin");

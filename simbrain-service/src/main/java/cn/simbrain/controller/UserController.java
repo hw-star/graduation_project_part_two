@@ -9,7 +9,6 @@ import cn.simbrain.util.Result;
 import cn.simbrain.util.ResultCode;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mysql.jdbc.StringUtils;
-import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +21,6 @@ import java.util.Map;
  * @description 用户控制层
  * @date 2021/2/11
  */
-@CrossOrigin
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -31,8 +29,6 @@ public class UserController {
     private UserMapper userMapper;
     @Autowired
     private EmailProvide emailProvide;
-    @Autowired
-    private Jwt jwt;
 
     /**
      * @description: 测试查询单个用户数据
@@ -70,7 +66,7 @@ public class UserController {
             return Result.failure(ResultCode.USER_LOGIN_ERROR);
         }
         if (userLogin.getUserLoginPwd().equals(user.getUserPwd())){
-            String token = jwt.createJwt(user.getId().toString(),user.getUserId(),true);
+            String token = Jwt.createJwt(user.getId().toString(),user.getUserId(),true);
             Map<String,String> map = new HashMap<>();
             map.put("token",token);
             /*Claims claims = jwt.parseJwt(token);

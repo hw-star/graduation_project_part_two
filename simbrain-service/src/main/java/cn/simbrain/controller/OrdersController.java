@@ -18,7 +18,6 @@ import java.util.Map;
  * @description 申请到活动的控制层
  * @date 2021/2/12
  */
-@CrossOrigin
 @RestController
 @RequestMapping("/orders")
 public class OrdersController {
