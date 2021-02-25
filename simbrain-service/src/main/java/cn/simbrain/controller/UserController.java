@@ -9,6 +9,7 @@ import cn.simbrain.util.Result;
 import cn.simbrain.util.ResultCode;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mysql.jdbc.StringUtils;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,18 +32,6 @@ public class UserController {
     private EmailProvide emailProvide;
 
     /**
-     * @description: 测试查询单个用户数据
-     * @Param id: ID  主键
-     * @return: User
-     */
-    @GetMapping("/finduser/{id}")
-    public Result getUser(@PathVariable("id") long id){
-        User user = userMapper.selectById(id);
-        if (user != null)
-            return Result.success(user);
-        return Result.failure(ResultCode.USER_LOGIN_ERROR);
-    }
-    /**
      * @description: 测试用户找回密码(邮箱发送密码方式)
      * @return: cn.simbrain.util.Result
      */
@@ -54,6 +43,11 @@ public class UserController {
         return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
     }
 
+    /**
+     * @description: 用户登录
+     * @Param userLogin: 账号及密码
+     * @return: cn.simbrain.util.Result
+     */
     @PostMapping("/login")
     public Result userLogin(@RequestBody UserLogin userLogin){
         if (StringUtils.isNullOrEmpty(userLogin.getUserLoginId()) || StringUtils.isNullOrEmpty(userLogin.getUserLoginPwd())){
@@ -84,5 +78,18 @@ public class UserController {
             return Result.success();
         }
         return Result.failure(ResultCode.USER_HAS_EXISTED);
+    }
+
+    @GetMapping("/info")
+    public Result getUserInfo(@RequestParam("token") String token){
+        Claims claims = Jwt.parseJwt(token);
+        Map<String,String> map = new HashMap<>();
+        User user = userMapper.selectById(claims.getId());
+        map.put("roles","admin");
+        map.put("name","admin");
+        map.put("avatar",user.getUserAvatar());
+        //map.put("解析出的ID",claims.getId());
+        //map.put("解析出的账号",claims.getSubject());
+        return Result.success(map);
     }
 }
