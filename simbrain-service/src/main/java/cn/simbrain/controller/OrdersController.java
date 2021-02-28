@@ -25,6 +25,14 @@ public class OrdersController {
     @Autowired
     private OrdersService ordersService;
 
+    /**
+     * @description: 查找某个活动报名的信息情况
+     * @Param id: 活动号
+     * @Param current: 当前页
+     * @Param limit: 页面数量
+     * @Param fuzzyquery: 关键字
+     * @return: cn.simbrain.util.Result
+     */
     @GetMapping("orderlist/{id}/{current}/{limit}")
     public Result getOrdersListPage(@PathVariable String id,
                                     @PathVariable long current,

@@ -30,7 +30,9 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         String path = request.getURI().getPath();
-        if(antPathMatcher.match("/sysuser/login", path) || antPathMatcher.match("/user/login", path)) {
+        if(antPathMatcher.match("/sysuser/login", path) ||
+                antPathMatcher.match("/user/login", path) ||
+        antPathMatcher.match("/activity/activitylist/**", path)) {
             return chain.filter(exchange);
         }
         ServerHttpResponse response = exchange.getResponse();

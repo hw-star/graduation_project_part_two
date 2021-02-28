@@ -46,6 +46,12 @@ public class Activity {
     private Integer actNumber;
     /**
      *
+     * 活动已报人数(Mysql不存在)
+     */
+    @TableField(exist = false)
+    private Integer actNumbered;
+    /**
+     *
      * 活动描述
      */
     private String actDescription;

@@ -1,9 +1,12 @@
 package cn.simbrain.service.impl;
 
 import cn.simbrain.mapper.ActivityMapper;
+import cn.simbrain.mapper.OrdersMapper;
 import cn.simbrain.pojo.Activity;
 import cn.simbrain.pojo.ActivityBody;
+import cn.simbrain.pojo.Orders;
 import cn.simbrain.service.ActivityService;
+import cn.simbrain.service.OrdersService;
 import cn.simbrain.util.Result;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -26,6 +29,8 @@ import java.util.Map;
 public class ActivityServiceImpl extends ServiceImpl<ActivityMapper, Activity> implements ActivityService {
     @Autowired
     private ActivityMapper activityMapper;
+    @Autowired
+    private OrdersService ordersService;
 
     @Override
     public Result getUsersListPage(long current, long limit) {
@@ -47,9 +52,9 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityMapper, Activity> i
         String begin = activityBody.getBegin();
         String end = activityBody.getEnd();
         if (begin != null)
-            wrapper.ge("act_create",begin);
+            wrapper.ge("act_update",begin);
         if (end != null)
-            wrapper.le("act_create",end);
+            wrapper.le("act_update",end);
         if (begin != null && end != null){
             if (fuzzyquery != null){
                 if (StringUtils.isNumeric(fuzzyquery)){
@@ -65,10 +70,14 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityMapper, Activity> i
                         .or().like("act_name",fuzzyquery);
             }
         }
-        wrapper.orderByDesc("act_create");
+        wrapper.orderByDesc("act_update");
         activityMapper.selectPage(activityPage,wrapper);
         long total = activityPage.getTotal();
         List<Activity> records = activityPage.getRecords();
+        for (Activity list:records){
+            int num = ordersService.count(new QueryWrapper<Orders>().eq("or_acid",list.getId()));
+            list.setActNumbered(num);
+        }
         Map<String,Object> map = new HashMap<>();
         map.put("total",total);
         map.put("activitydata",records);

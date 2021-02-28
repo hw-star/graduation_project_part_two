@@ -15,6 +15,12 @@ import org.springframework.web.util.pattern.PathPatternParser;
  */
 @Configuration
 public class CorsConfig {
+
+    /**
+     * @description: 处理跨域问题
+     *
+     * @return: org.springframework.web.cors.reactive.CorsWebFilter
+     */
     @Bean
     public CorsWebFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
