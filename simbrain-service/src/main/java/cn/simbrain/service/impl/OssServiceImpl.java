@@ -18,6 +18,12 @@ import java.util.UUID;
  */
 @Service
 public class OssServiceImpl implements OssService {
+
+    /**
+     * @description: 设置头像
+     * @Param multipartFile: 头像文件
+     * @return: java.lang.String
+     */
     @Override
     public String addFileAvatar(MultipartFile multipartFile) {
         String endpoint = "http://oss-cn-beijing.aliyuncs.com";
