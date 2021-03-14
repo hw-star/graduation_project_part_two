@@ -32,7 +32,8 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
         String path = request.getURI().getPath();
         if(antPathMatcher.match("/sysuser/login", path) ||
                 antPathMatcher.match("/user/login", path) ||
-        antPathMatcher.match("/activity/activitylist/**", path)) {
+        antPathMatcher.match("/activity/activitylist/**", path) ||
+        antPathMatcher.match("/druid", path)) {
             return chain.filter(exchange);
         }
         ServerHttpResponse response = exchange.getResponse();

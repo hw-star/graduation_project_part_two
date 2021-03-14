@@ -61,12 +61,6 @@ spring:
           testWhileIdle: true
           testOnBorrow: false
           testOnReturn: false
-          stat-view-servlet:
-            enabled: true
-            reset-enable: false
-            login-username: admin
-            login-password: youngvolunteer
-            url-pattern: /druid/*
           poolPreparedStatements: true
           maxPoolPreparedStatementPerConnectionSize: 25
           filters: stat,wall,slf4j
