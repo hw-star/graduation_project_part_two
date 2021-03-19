@@ -82,4 +82,10 @@ public class SysUser {
      * 管理员状态(是否禁用)
      */
     private Integer sysStop;
+    /**
+     *
+     * 该管理员角色(Mysql不存在)
+     */
+    @TableField(exist = false)
+    private Long sysRoleId;
 }
