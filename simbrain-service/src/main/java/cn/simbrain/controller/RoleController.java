@@ -6,12 +6,10 @@ import cn.simbrain.service.OrderRolesService;
 import cn.simbrain.service.RoleService;
 import cn.simbrain.util.Result;
 import cn.simbrain.util.ResultCode;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLOutput;
 import java.util.List;
 
 /**

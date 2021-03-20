@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 
 /**
@@ -117,7 +116,8 @@ public class LogAop {
         // 请求耗时
         logSuccess.setFinishTime(Long.toString(endTime - startTime));
         // 请求返回
-        logSuccess.setRequestResult(ret.toString());
+        if (ret!=null)
+            logSuccess.setRequestResult(ret.toString());
         logSuccessService.insertMsg(logSuccess);
     }
 
