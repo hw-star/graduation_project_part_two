@@ -5,24 +5,19 @@ import com.alibaba.excel.support.ExcelTypeEnum;
 import com.alibaba.excel.write.metadata.style.WriteCellStyle;
 import com.alibaba.excel.write.metadata.style.WriteFont;
 import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
-import com.google.gson.JsonObject;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
-import org.springframework.core.io.buffer.DataBuffer;
-import reactor.core.publisher.Mono;
-
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
- * @Description 导入导出工具
- * @Author 赵文源
- * @Contact antordragon@163.com
- * @Date 2020/6/17 - 19:36
+ * @author huowei
+ * @version 1.0.0
+ * @description TODO
+ * @date 2021/3/20
  */
 public class ExportProvide {
 
@@ -61,9 +56,8 @@ public class ExportProvide {
                 .sheet(sheetName)
                 .registerWriteHandler(horizontalCellStyleStrategy)
                 //最大长度自适应 目前没有对应算法优化 建议注释掉不用 会出bug
-//                .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
+              //.registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
                 .doWrite(data);
-
     }
 
     /**
@@ -80,14 +74,10 @@ public class ExportProvide {
             response.setCharacterEncoding("UTF-8");
             response.setContentType("multipart/form-data");
             response.setHeader("Content-Disposition", "attachment; filename=" +  fileName + ".xlsx");
-//            response.setHeader("Pragma", "public");
-//            response.setHeader("Cache-Control", "no-store");
-//            response.addHeader("Cache-Control", "max-age=0");
             return response.getOutputStream();
         } catch (IOException e) {
             throw new Exception("导出excel表格失败!", e);
         }
     }
-
 
 }
