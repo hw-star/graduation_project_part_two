@@ -56,7 +56,7 @@ public class SysUserController {
             return Result.failure(ResultCode.USER_LOGIN_ERROR);
         }
         if (sysUserLogin.getSysUserLoginPwd().equals(sysUser.getSysPwd())) {
-            String token = Jwt.createJwt(sysUser.getId().toString(), sysUserLogin.getSysUserLoginId(), true);
+            String token = Jwt.createJwt(sysUser.getId().toString(), sysUserLogin.getSysUserLoginId(), true,sysUser.getSysName());
             Map<String, String> map = new HashMap<>();
             map.put("token", token);
             return Result.success(map);

@@ -1,6 +1,7 @@
 package cn.simbrain.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -73,4 +74,9 @@ public class LogFailure {
          * 异常信息
          */
         private  String errorMessage;
+        /**
+         *
+         * 操作人
+         */
+        private String requestName;
 }

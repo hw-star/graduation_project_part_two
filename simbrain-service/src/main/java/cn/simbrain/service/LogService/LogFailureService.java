@@ -22,10 +22,7 @@ public class LogFailureService {
      * @Param logFailure: 数据
      * @return: boolean
      */
-    public boolean insertMsg(LogFailure logFailure){
-        int count = logFailureMapper.insert(logFailure);
-        if (count > 1)
-            return true;
-        return false;
+    public void insertMsg(LogFailure logFailure){
+        logFailureMapper.insert(logFailure);
     }
 }

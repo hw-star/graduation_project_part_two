@@ -22,10 +22,8 @@ public class LogSuccessService {
      * @Param logSuccess: 数据
      * @return: boolean
      */
-    public boolean insertMsg(LogSuccess logSuccess){
-        int count = logSuccessMapper.insert(logSuccess);
-        if (count > 1)
-            return true;
-        return false;
+    public void insertMsg(LogSuccess logSuccess){
+        logSuccessMapper.insert(logSuccess);
     }
+
 }

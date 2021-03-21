@@ -65,7 +65,7 @@ public class UserController {
             return Result.failure(ResultCode.USER_LOGIN_ERROR);
         }
         if (userLogin.getUserLoginPwd().equals(user.getUserPwd())){
-            String token = Jwt.createJwt(user.getId().toString(),user.getUserId(),true);
+            String token = Jwt.createJwt(user.getId().toString(),user.getUserId(),true,user.getUserName());
             Map<String,String> map = new HashMap<>();
             map.put("token",token);
             /*Claims claims = jwt.parseJwt(token);

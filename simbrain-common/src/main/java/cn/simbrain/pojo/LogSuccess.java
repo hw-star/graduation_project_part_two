@@ -1,6 +1,7 @@
 package cn.simbrain.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -78,5 +79,9 @@ public class LogSuccess {
      * 请求结果
      */
     private String requestResult;
-
+    /**
+     *
+     * 操作人
+     */
+    private String requestName;
 }

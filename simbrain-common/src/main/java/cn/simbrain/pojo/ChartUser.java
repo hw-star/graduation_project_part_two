@@ -46,4 +46,9 @@ public class ChartUser {
      * 无权限管理员数量
      */
     private Integer adminNull;
+    /**
+     *
+     * 活动数量
+     */
+    private Integer activityNumber;
 }
