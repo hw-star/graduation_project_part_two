@@ -31,7 +31,7 @@ public class LogData {
 
     @GetMapping("/getlogdata")
     public Result getLogData(){
-        List<LogSuccess> list = logSuccessMapper.selectList(new QueryWrapper<LogSuccess>().notLike("request_url","logdata/getlogdata").notLike("request_url","chartuser/getchart").orderByDesc("id").last("LIMIT 20"));
+        List<LogSuccess> list = logSuccessMapper.selectList(new QueryWrapper<LogSuccess>().notLike("request_url","logdata/getlogdata").notLike("request_url","chartuser/getchart").orderByDesc("id").last("LIMIT 40"));
         List<LogDataMsg> logDataMsgs = new ArrayList<>();
         for (LogSuccess item:list){
             LogDataMsg logDataMsg = new LogDataMsg();
