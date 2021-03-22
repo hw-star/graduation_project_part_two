@@ -1,10 +1,8 @@
 package cn.simbrain.controller;
 
-import cn.simbrain.pojo.Activity;
 import cn.simbrain.pojo.Orders;
 import cn.simbrain.pojo.excel.ListPerson;
 import cn.simbrain.provide.ExportProvide;
-import cn.simbrain.service.ActivityService;
 import cn.simbrain.service.OrdersService;
 import cn.simbrain.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -32,13 +30,10 @@ public class ExcelController {
     private OrdersService ordersService;
     @Autowired
     private UserService userService;
-    @Autowired
-    private ActivityService activityService;
 
     @GetMapping("/getexcel/{id}")
     public void getExcelList(@PathVariable String id, HttpServletResponse response) {
         List<Orders> list = ordersService.list(new QueryWrapper<Orders>().eq("or_acid",id));
-        Activity activity = activityService.getById(list.get(0).getOrAcid());
         List<ListPerson> listPeople = new ArrayList<>();
 //        for (Orders item:list){
 //            User user = userService.getOne(new QueryWrapper<User>().eq("user_id",item.getOrId()));
@@ -50,7 +45,7 @@ public class ExcelController {
 //            listPeople.add(even);
 //        }
         listPeople.add(new ListPerson("15536869272","测试","男","13203427964"));
-        String fileName = activity.getActName();
+        String fileName = list.get(0).getOrName();
         try {
             ExportProvide.writeExcel(response, listPeople, fileName, "人员名单",ListPerson.class);
         } catch (Exception exception) {
