@@ -84,4 +84,9 @@ public class LogSuccess {
      * 操作人
      */
     private String requestName;
+    /**
+     *
+     * 操作账号
+     */
+    private String requestId;
 }

@@ -72,9 +72,11 @@ public class LogAop {
         // 获取请求头中的User-Agent
         UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
         String name = null;
+        String id = null;
         if (request.getHeader("X-Token") != null) {
             Claims claims = Jwt.parseJwt(request.getHeader("X-Token"));
             name = (String) claims.get("name");
+            id = claims.getSubject();
         }
         startTime = System.currentTimeMillis();
         try{
@@ -86,6 +88,8 @@ public class LogAop {
             logSuccess.setRequestMethod(request.getMethod());
             // 请求发起人
             logSuccess.setRequestName(name);
+            // 操作账号
+            logSuccess.setRequestId(id);
             // 请求ip
             logSuccess.setRequestIp(request.getRemoteAddr());
             // 请求方法
