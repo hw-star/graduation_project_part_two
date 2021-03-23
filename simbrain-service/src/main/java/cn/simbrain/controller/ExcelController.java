@@ -1,8 +1,11 @@
 package cn.simbrain.controller;
 
+import cn.simbrain.pojo.Activity;
 import cn.simbrain.pojo.Orders;
+import cn.simbrain.pojo.User;
 import cn.simbrain.pojo.excel.ListPerson;
 import cn.simbrain.provide.ExportProvide;
+import cn.simbrain.service.ActivityService;
 import cn.simbrain.service.OrdersService;
 import cn.simbrain.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -30,6 +33,8 @@ public class ExcelController {
     private OrdersService ordersService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private ActivityService activityService;
 
     @GetMapping("/getexcel/{id}")
     public void getExcelList(@PathVariable String id, HttpServletResponse response) {
@@ -40,14 +45,18 @@ public class ExcelController {
 //            ListPerson even = new ListPerson();
 //            even.setId(user.getUserId());
 //            even.setName(user.getUserName());
-//            even.setPhone(user.getUserId());
+//            even.setEmail(user.getUserEmail());
 //            even.setSex(user.getUserSex() == 1 ? "男":"女");
 //            listPeople.add(even);
 //        }
-        listPeople.add(new ListPerson("15536869272","测试","男","13203427964"));
-        String fileName = list.get(0).getOrName();
+        // 测试数据，2条      正式上线代码为上面注释部分
+        listPeople.add(new ListPerson("15536869272","测试","男","3111314916@qq.com"));
+        listPeople.add(new ListPerson("15536869272","测试","男","3111314916@qq.com"));
+        String activityId = list.get(0).getOrAcid();
+        Activity activity =  activityService.getById(activityId);
+
         try {
-            ExportProvide.writeExcel(response, listPeople, fileName, "人员名单",ListPerson.class);
+            ExportProvide.writeExcel(response, listPeople, activity.getActName(), "人员名单",ListPerson.class);
         } catch (Exception exception) {
             exception.printStackTrace();
         }

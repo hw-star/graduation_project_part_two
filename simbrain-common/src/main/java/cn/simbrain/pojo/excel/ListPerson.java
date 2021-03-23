@@ -19,7 +19,7 @@ public class ListPerson {
      *
      * 账号
      */
-    @ExcelProperty("账号")
+    @ExcelProperty("账号(手机号)")
     private String id;
     /**
      *
@@ -37,7 +37,7 @@ public class ListPerson {
      *
      * 联系方式
      */
-    @ExcelProperty("联系方式")
-    private String phone;
+    @ExcelProperty("邮箱")
+    private String email;
 
 }

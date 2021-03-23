@@ -115,9 +115,9 @@ public class SysUserController {
         if (!"".equals(fuzzyquery)){
            if ("禁用".equals(fuzzyquery))
                 wrapper.eq("sys_stop",1);
-            wrapper
-                    .or().like("sys_id",fuzzyquery)
-                    .or().like("sys_pwd",fuzzyquery);
+           wrapper
+                   .or().like("sys_id",fuzzyquery)
+                   .or().like("sys_pwd",fuzzyquery);
         }
         wrapper.orderByDesc("sys_create");
         sysUserService.page(sysUserPage,wrapper);
@@ -218,6 +218,11 @@ public class SysUserController {
         return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
     }
 
+    /**
+     * @description: 找回密码
+     * @Param findPwd: 账号邮箱实体
+     * @return: cn.simbrain.util.Result
+     */
     @PostMapping("/findpwd")
     public Result findPwd(@RequestBody FindPwd findPwd){
         SysUser sysUser = sysUserService.getOne(new QueryWrapper<SysUser>().eq("sys_id",findPwd.getId()));
