@@ -68,9 +68,6 @@ public class UserController {
             String token = Jwt.createJwt(user.getId().toString(),user.getUserId(),true,user.getUserName());
             Map<String,String> map = new HashMap<>();
             map.put("token",token);
-            /*Claims claims = jwt.parseJwt(token);
-            map.put("解析出的ID",claims.getId());
-            map.put("解析出的账号",claims.getSubject());*/
             return Result.success(map);
         }
         return Result.failure(ResultCode.USER_LOGIN_ERROR);
@@ -135,7 +132,7 @@ public class UserController {
     }
 
     /**
-     * @description: 管理员删除用户
+     * @description: 删除用户
      * @Param id: 用户ID
      * @return: cn.simbrain.util.Result
      */
@@ -148,7 +145,7 @@ public class UserController {
     }
 
     /**
-     * @description: 管理员新增用户
+     * @description: 新增用户
      * @Param user: 用户实体
      * @return: cn.simbrain.util.Result
      */
@@ -168,7 +165,7 @@ public class UserController {
     }
 
     /**
-     * @description: 管理员查询某个用户
+     * @description: 查询某个用户
      * @Param id: ID
      * @return: cn.simbrain.util.Result
      */
@@ -183,7 +180,7 @@ public class UserController {
     }
 
     /**
-     * @description: 管理员更新用户
+     * @description: 更新用户
      * @Param user: 用户实体类
      * @return: cn.simbrain.util.Result
      */
@@ -212,5 +209,15 @@ public class UserController {
         if (res)
             return Result.success();
         return Result.failure(ResultCode.INTERFACE_REQUEST_TIMEOUT);
+    }
+
+    /**
+     * @description: 用户退出
+     * @Param token: jwtt令牌
+     * @return: cn.simbrain.util.Result
+     */
+    @PostMapping("/logout")
+    public Result userLogOut(){
+        return Result.success();
     }
 }
