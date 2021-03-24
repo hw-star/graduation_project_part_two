@@ -1,4 +1,4 @@
-package cn.simbrain.controller;
+package cn.simbrain.provide;
 
 import cn.simbrain.pojo.ChartUser;
 import cn.simbrain.pojo.OrderRoles;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/chartuser")
-public class ChartUserController {
+public class ChartUserProvide {
     @Autowired
     private UserService userService;
     @Autowired

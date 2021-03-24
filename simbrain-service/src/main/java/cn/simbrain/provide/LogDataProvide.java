@@ -1,4 +1,4 @@
-package cn.simbrain.controller;
+package cn.simbrain.provide;
 
 import cn.simbrain.mapper.logmapper.LogSuccessMapper;
 import cn.simbrain.pojo.LogDataMsg;
@@ -21,14 +21,18 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/logdata")
-public class LogData {
+public class LogDataProvide {
 
     @Autowired
     private LogSuccessMapper logSuccessMapper;
 
+    /**
+     * @description: 获取日志信息
+     * @return: cn.simbrain.util.Result
+     */
     @GetMapping("/getlogdata")
     public Result getLogData(){
-        List<LogSuccess> list = logSuccessMapper.selectList(new QueryWrapper<LogSuccess>().notLike("request_url","logdata/getlogdata").notLike("request_url","chartuser/getchart").orderByDesc("id").last("LIMIT 40"));
+        List<LogSuccess> list = logSuccessMapper.selectList(new QueryWrapper<LogSuccess>().orderByDesc("id").last("LIMIT 40"));
         List<LogDataMsg> logDataMsgs = new ArrayList<>();
         for (LogSuccess item:list){
             LogDataMsg logDataMsg = new LogDataMsg();
