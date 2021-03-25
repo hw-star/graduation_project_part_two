@@ -47,4 +47,9 @@ public class Orders {
      * 用户邮箱
      */
     private String orEmail;
+    /**
+     *
+     * 活动名字
+     */
+    private String actName;
 }

@@ -1,6 +1,8 @@
 package cn.simbrain.controller;
 
 import cn.simbrain.mapper.UserMapper;
+import cn.simbrain.pojo.FindPwd.FindPwd;
+import cn.simbrain.pojo.SysUser;
 import cn.simbrain.pojo.User;
 import cn.simbrain.pojo.login.UserLogin;
 import cn.simbrain.provide.EmailProvide;
@@ -15,6 +17,7 @@ import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,18 +38,6 @@ public class UserController {
     private EmailProvide emailProvide;
     @Autowired
     private UserService userService;
-
-    /**
-     * @description: 测试用户找回密码(邮箱发送密码方式)
-     * @return: cn.simbrain.util.Result
-     */
-    @GetMapping("/send")
-    public Result sendEmail() {
-        boolean sendState = emailProvide.createEmail(false,"1234556","15536869272","3111314916@qq.com");
-        if (sendState)
-            return Result.success();
-        return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
-    }
 
     /**
      * @description: 用户登录
@@ -82,17 +73,32 @@ public class UserController {
         return Result.failure(ResultCode.USER_HAS_EXISTED);
     }
 
+    /**
+     * @description: 登录后自动获取用户信息
+     * @Param token: jwt令牌
+     * @return: cn.simbrain.util.Result
+     */
     @GetMapping("/info")
     public Result getUserInfo(@RequestParam("token") String token){
         Claims claims = Jwt.parseJwt(token);
-        Map<String,String> map = new HashMap<>();
+        Map<String,Object> map = new HashMap<>();
         User user = userMapper.selectById(claims.getId());
-        map.put("roles","admin");
         map.put("name","admin");
         map.put("avatar",user.getUserAvatar());
-        //map.put("解析出的ID",claims.getId());
-        //map.put("解析出的账号",claims.getSubject());
         return Result.success(map);
+    }
+
+    /**
+     * @description: 点击触发获取用户信息
+     * @Param request: 请求
+     * @return: cn.simbrain.util.Result
+     */
+    @GetMapping("/infomsg")
+    public Result getUserMsg(HttpServletRequest request){
+        Claims claims = Jwt.parseJwt(request.getHeader("X-Token"));
+        Map<String,Object> map = new HashMap<>();
+        User user = userMapper.selectById(claims.getId());
+        return Result.success(user);
     }
 
     /**
@@ -212,6 +218,24 @@ public class UserController {
     }
 
     /**
+     * @description: 找回密码
+     * @Param findPwd: 找回密码实体
+     * @return: cn.simbrain.util.Result
+     */
+    @PostMapping("/findpwd")
+    public Result findPwd(@RequestBody FindPwd findPwd){
+        User user = userService.getOne(new QueryWrapper<User>().eq("user_id",findPwd.getId()));
+        if (user == null)
+            return Result.failure(ResultCode.DATA_NONE);
+        if (!user.getUserEmail().equals(findPwd.getEmail()))
+            return Result.failure(ResultCode.DATA_WRONG);
+        boolean sendState = emailProvide.createEmail(false,user.getUserPwd(),findPwd.getId(),findPwd.getEmail());
+        if (sendState)
+            return Result.success();
+        return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
+    }
+
+    /**
      * @description: 用户退出
      * @Param token: jwtt令牌
      * @return: cn.simbrain.util.Result
@@ -220,4 +244,5 @@ public class UserController {
     public Result userLogOut(){
         return Result.success();
     }
+
 }

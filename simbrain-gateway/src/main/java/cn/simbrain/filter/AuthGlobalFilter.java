@@ -35,7 +35,9 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
                 antPathMatcher.match("/activity/activitylist/**", path) ||
                 antPathMatcher.match("/druid", path) ||
                 antPathMatcher.match("/excel/getexcel/**", path) ||
-                antPathMatcher.match("/sysuser/findpwd", path)) {
+                antPathMatcher.match("/sysuser/findpwd", path) ||
+                antPathMatcher.match("/user/adduser", path) ||
+                antPathMatcher.match("/user/findpwd", path)) {
             return chain.filter(exchange);
         }
         ServerHttpResponse response = exchange.getResponse();
