@@ -40,18 +40,15 @@ public class ExcelController {
     public void getExcelList(@PathVariable String id, HttpServletResponse response) {
         List<Orders> list = ordersService.list(new QueryWrapper<Orders>().eq("or_acid",id));
         List<ListPerson> listPeople = new ArrayList<>();
-//        for (Orders item:list){
-//            User user = userService.getOne(new QueryWrapper<User>().eq("user_id",item.getOrId()));
-//            ListPerson even = new ListPerson();
-//            even.setId(user.getUserId());
-//            even.setName(user.getUserName());
-//            even.setEmail(user.getUserEmail());
-//            even.setSex(user.getUserSex() == 1 ? "男":"女");
-//            listPeople.add(even);
-//        }
-        // 测试数据，2条      正式上线代码为上面注释部分
-        listPeople.add(new ListPerson("15536869272","测试","男","3111314916@qq.com"));
-        listPeople.add(new ListPerson("15536869272","测试","男","3111314916@qq.com"));
+        for (Orders item:list) {
+            User user = userService.getOne(new QueryWrapper<User>().eq("user_id", item.getOrId()));
+            ListPerson even = new ListPerson();
+            even.setId(user.getUserId());
+            even.setName(user.getUserName());
+            even.setEmail(user.getUserEmail());
+            even.setSex(user.getUserSex() == 1 ? "男" : "女");
+            listPeople.add(even);
+        }
         String activityId = list.get(0).getOrAcid();
         Activity activity =  activityService.getById(activityId);
 

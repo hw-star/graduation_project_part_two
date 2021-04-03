@@ -7,10 +7,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="simbrain-service" />
+        <module name="simbrain-registry" />
         <module name="simbrain-gateway" />
         <module name="simbrain-common" />
-        <module name="simbrain-registry" />
+        <module name="simbrain-service" />
       </profile>
     </annotationProcessing>
   </component>
