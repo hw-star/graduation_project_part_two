@@ -2,6 +2,7 @@ package cn.simbrain.controller;
 
 import cn.simbrain.pojo.OrderRoles;
 import cn.simbrain.pojo.Role;
+import cn.simbrain.provide.IsHaveRole;
 import cn.simbrain.service.OrderRolesService;
 import cn.simbrain.service.RoleService;
 import cn.simbrain.util.Result;
@@ -10,6 +11,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -22,6 +24,8 @@ import java.util.List;
 @RequestMapping("/role")
 public class RoleController {
 
+    String[] roles = new String[]{"1"};
+
     @Autowired
     private RoleService roleService;
     @Autowired
@@ -32,7 +36,10 @@ public class RoleController {
      * @return: cn.simbrain.util.Result
      */
     @GetMapping("/rolelist")
-    public Result getRolesList(){
+    public Result getRolesList(HttpServletRequest request){
+        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+        if (!result)
+            return Result.failure(ResultCode.DATA_NONE);
         List<Role> list = roleService.list();
         if (list == null){
             return Result.failure(ResultCode.DATA_NONE);
@@ -47,7 +54,11 @@ public class RoleController {
      */
     @GetMapping("/updatesysuserrole/{sorId}/{sorRoid}")
     public Result updateSysUserRole(@PathVariable String sorId,
-                                    @PathVariable String sorRoid){
+                                    @PathVariable String sorRoid,
+                                    HttpServletRequest request){
+        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+        if (!result)
+            return Result.failure(ResultCode.DATA_NONE);
         UpdateWrapper<OrderRoles> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("sor_id", sorId);
         OrderRoles roles = new OrderRoles();

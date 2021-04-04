@@ -3,7 +3,9 @@ package cn.simbrain.controller;
 import cn.simbrain.pojo.Activity;
 import cn.simbrain.pojo.Orders;
 import cn.simbrain.pojo.User;
+import cn.simbrain.provide.IsHaveRole;
 import cn.simbrain.service.ActivityService;
+import cn.simbrain.service.OrderRolesService;
 import cn.simbrain.service.OrdersService;
 import cn.simbrain.service.UserService;
 import cn.simbrain.util.Jwt;
@@ -30,12 +32,16 @@ import java.util.Map;
 @RequestMapping("/orders")
 public class OrdersController {
 
+    String[] roles = new String[]{"1","3","4"};
+
     @Autowired
     private OrdersService ordersService;
     @Autowired
     private UserService userService;
     @Autowired
     private ActivityService activityService;
+    @Autowired
+    private OrderRolesService orderRolesService;
 
     /**
      * @description: 查找某个活动报名的人员名单
@@ -49,7 +55,11 @@ public class OrdersController {
     public Result getOrdersListPage(@PathVariable String id,
                                     @PathVariable long current,
                                     @PathVariable long limit,
-                                    @RequestParam(value = "fuzzyquery",required = false) String fuzzyquery){
+                                    @RequestParam(value = "fuzzyquery",required = false) String fuzzyquery,
+                                    HttpServletRequest request){
+        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+        if (!result)
+            return Result.failure(ResultCode.DATA_NONE);
         Page<Orders> ordersPage = new Page<>(current,limit);
         QueryWrapper<Orders> wrapper = new QueryWrapper<>();
         if (!"".equals(fuzzyquery)){
@@ -76,7 +86,10 @@ public class OrdersController {
      * @return: cn.simbrain.util.Result 
      */
     @DeleteMapping("/deleteorder/{id}")
-    public Result deletedOrders(@PathVariable String id){
+    public Result deletedOrders(@PathVariable String id, HttpServletRequest request){
+        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+        if (!result)
+            return Result.failure(ResultCode.DATA_NONE);
         boolean res = ordersService.removeById(id);
         if (res)
             return Result.success();

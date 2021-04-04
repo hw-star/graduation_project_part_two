@@ -11,6 +11,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.joda.time.DateTime;
 import cn.simbrain.util.Jwt;
+import org.junit.platform.commons.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -79,6 +80,12 @@ public class LogAop {
             id = claims.getSubject();
         }
         startTime = System.currentTimeMillis();
+        String ip = request.getHeader("x-forwarded-for");
+        if (StringUtils.isNotBlank(ip)) {
+            if (ip.contains(",")) {
+                ip = ip.split(",")[0];
+            }
+        }
         try{
             // 请求开始时间
             logSuccess.setStartTime(new DateTime().toString("yyyy-MM-dd HH:mm:ss"));
@@ -91,7 +98,7 @@ public class LogAop {
             // 操作账号
             logSuccess.setRequestId(id);
             // 请求ip
-            logSuccess.setRequestIp(request.getRemoteAddr());
+            logSuccess.setRequestIp(ip);
             // 请求方法
             logSuccess.setRequestSignature(joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
             // 请求参数
@@ -106,7 +113,7 @@ public class LogAop {
             logFailure.setRequestUrl(request.getRequestURL().toString());
             logFailure.setRequestMethod(request.getMethod());
             logFailure.setRequestName(name);
-            logFailure.setRequestIp(request.getRemoteAddr());
+            logFailure.setRequestIp(ip);
             logFailure.setRequestSignature(joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
             logFailure.setRequestParam(Arrays.toString(joinPoint.getArgs()));
             logFailure.setRequestBrowser(userAgent.getBrowser().toString());

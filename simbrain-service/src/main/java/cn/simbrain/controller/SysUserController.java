@@ -4,6 +4,7 @@ import cn.simbrain.pojo.*;
 import cn.simbrain.pojo.FindPwd.FindPwd;
 import cn.simbrain.pojo.login.SysUserLogin;
 import cn.simbrain.provide.EmailProvide;
+import cn.simbrain.provide.IsHaveRole;
 import cn.simbrain.service.OrderRolesService;
 import cn.simbrain.service.RoleService;
 import cn.simbrain.service.SysUserService;
@@ -16,6 +17,8 @@ import com.mysql.jdbc.StringUtils;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +32,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/sysuser")
 public class SysUserController {
+
+    String[] roles = new String[]{"1"};
 
     @Autowired
     private SysUserService sysUserService;
@@ -55,6 +60,9 @@ public class SysUserController {
         if (sysUser == null){
             return Result.failure(ResultCode.USER_LOGIN_ERROR);
         }
+        if (sysUser.getSysStop() == 1){
+            return Result.failure(ResultCode.USER_LOGIN_ERROR);
+        }
         if (sysUserLogin.getSysUserLoginPwd().equals(sysUser.getSysPwd())) {
             String token = Jwt.createJwt(sysUser.getId().toString(), sysUserLogin.getSysUserLoginId(), true,sysUser.getSysName());
             Map<String, String> map = new HashMap<>();
@@ -65,7 +73,7 @@ public class SysUserController {
     }
 
     /**
-     * @description: 获取登录者信息功能
+     * @description: 获取登录者信息
      * @Param token: 身份令牌
      * @return: cn.simbrain.util.Result
      */
@@ -109,7 +117,11 @@ public class SysUserController {
     @GetMapping("sysuserlist/{current}/{limit}")
     public Result getsysUsersListPage(@PathVariable long current,
                                    @PathVariable long limit,
-                                   @RequestParam(value = "fuzzyquery",required = false) String fuzzyquery){
+                                   @RequestParam(value = "fuzzyquery",required = false) String fuzzyquery,
+                                      HttpServletRequest request){
+        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+        if (!result)
+            return Result.failure(ResultCode.DATA_NONE);
         Page<SysUser> sysUserPage = new Page<>(current,limit);
         QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
         if (!"".equals(fuzzyquery)){
@@ -140,7 +152,10 @@ public class SysUserController {
      * @return: cn.simbrain.util.Result
      */
     @DeleteMapping("/deletesysuser/{id}")
-    public Result deletedsysUser(@PathVariable String id){
+    public Result deletedsysUser(@PathVariable String id, HttpServletRequest request){
+        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+        if (!result)
+            return Result.failure(ResultCode.DATA_NONE);
         boolean res = sysUserService.removeById(id);
         if (res)
             return Result.success();
@@ -155,7 +170,11 @@ public class SysUserController {
      */
     @GetMapping("/stopsysuser/{id}/{stateCode}")
     public Result stopsysUser(@PathVariable String id,
-                           @PathVariable Integer stateCode){
+                           @PathVariable Integer stateCode,
+                              HttpServletRequest request){
+        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+        if (!result)
+            return Result.failure(ResultCode.DATA_NONE);
         SysUser sysUser = sysUserService.getById(id);
         sysUser.setSysStop(stateCode);
         boolean res = sysUserService.updateById(sysUser);
@@ -170,7 +189,10 @@ public class SysUserController {
      * @return: cn.simbrain.util.Result
      */
     @PostMapping("addsysuser")
-    public Result addsysUser(@RequestBody SysUser sysUser){
+    public Result addsysUser(@RequestBody SysUser sysUser, HttpServletRequest request){
+        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+        if (!result)
+            return Result.failure(ResultCode.DATA_NONE);
         if (sysUser.getSysId() == null || sysUser.getSysEmail() == null || sysUser.getSysPwd() == null)
             return Result.failure(ResultCode.PARAM_NOT_COMPLETE);
         QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
@@ -194,7 +216,10 @@ public class SysUserController {
      * @return: cn.simbrain.util.Result
      */
     @GetMapping("/getsysuser/{id}")
-    public Result getsysUser(@PathVariable String id){
+    public Result getsysUser(@PathVariable String id, HttpServletRequest request){
+        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+        if (!result)
+            return Result.failure(ResultCode.DATA_NONE);
         QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
         wrapper.eq("id",id.trim());
         SysUser sysUser = sysUserService.getOne(wrapper);
@@ -209,7 +234,15 @@ public class SysUserController {
      * @return: cn.simbrain.util.Result
      */
     @PostMapping("/updatesysuser")
-    public Result updatesysUser(@RequestBody SysUser sysUser){
+    public Result updatesysUser(@RequestBody SysUser sysUser, HttpServletRequest request){
+        Claims claims = Jwt.parseJwt(request.getHeader("X-Token"));
+        String id = claims.getSubject();
+        SysUser sysUserFind = sysUserService.getOne(new QueryWrapper<SysUser>().eq("sys_id", id));
+        if (!sysUserFind.getSysId().equals(sysUser.getSysId())){
+            boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+            if (!result)
+                return Result.failure(ResultCode.DATA_NONE);
+        }
         SysUser sysUserInSql = sysUserService.getById(sysUser.getId());
         sysUser.setSysId(sysUserInSql.getSysId());
         boolean res = sysUserService.updateById(sysUser);

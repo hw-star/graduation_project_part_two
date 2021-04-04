@@ -24,6 +24,18 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  redis:
+    host: 39.97.253.156
+    port: 6379
+    database: 0
+    timeout: 180000
+    lettuce:
+      pool:
+        max-active: 60
+        max-wait: -1
+        max-idle: 20
+        min-idle: 4
+    password: huowei417510..
   mail:
     username: 3111314916@qq.com
     password: gmpqfnygpvzxdgah

@@ -1,11 +1,12 @@
 package cn.simbrain.service.impl;
 
 import cn.simbrain.mapper.ActivityMapper;
-import cn.simbrain.mapper.OrdersMapper;
 import cn.simbrain.pojo.Activity;
 import cn.simbrain.pojo.ActivityBody;
+import cn.simbrain.pojo.OrderRoles;
 import cn.simbrain.pojo.Orders;
 import cn.simbrain.service.ActivityService;
+import cn.simbrain.service.OrderRolesService;
 import cn.simbrain.service.OrdersService;
 import cn.simbrain.util.Result;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -31,10 +32,12 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityMapper, Activity> i
     private ActivityMapper activityMapper;
     @Autowired
     private OrdersService ordersService;
+    @Autowired
+    private OrderRolesService orderRolesService;
 
     @Override
-    public Result getUsersListPage(long current, long limit) {
-        return this.getUsersListPage(current,limit,new ActivityBody("","",""));
+    public Result getUsersListPage(long current, long limit, String id) {
+        return this.getUsersListPage(current,limit,new ActivityBody("","",""), id);
     }
 
     /**
@@ -45,7 +48,7 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityMapper, Activity> i
      * @return: cn.simbrain.util.Result
      */
     @Override
-    public Result getUsersListPage(long current, long limit, ActivityBody activityBody) {
+    public Result getUsersListPage(long current, long limit, ActivityBody activityBody, String id) {
         Page<Activity> activityPage = new Page<>(current,limit);
         QueryWrapper<Activity> wrapper = new QueryWrapper<>();
         String fuzzyquery = activityBody.getFuzzyquery();
@@ -70,6 +73,9 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityMapper, Activity> i
                         .or().like("act_name",fuzzyquery);
             }
         }
+        OrderRoles orderRoles = orderRolesService.getOne(new QueryWrapper<OrderRoles>().eq("sor_id", id));
+        if (orderRoles == null)
+            wrapper.ne("act_active", 0);
         wrapper.orderByDesc("act_update");
         activityMapper.selectPage(activityPage,wrapper);
         long total = activityPage.getTotal();

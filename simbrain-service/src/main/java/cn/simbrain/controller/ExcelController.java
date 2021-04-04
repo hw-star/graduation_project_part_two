@@ -36,26 +36,29 @@ public class ExcelController {
     @Autowired
     private ActivityService activityService;
 
+
     @GetMapping("/getexcel/{id}")
     public void getExcelList(@PathVariable String id, HttpServletResponse response) {
         List<Orders> list = ordersService.list(new QueryWrapper<Orders>().eq("or_acid",id));
-        List<ListPerson> listPeople = new ArrayList<>();
-        for (Orders item:list) {
-            User user = userService.getOne(new QueryWrapper<User>().eq("user_id", item.getOrId()));
-            ListPerson even = new ListPerson();
-            even.setId(user.getUserId());
-            even.setName(user.getUserName());
-            even.setEmail(user.getUserEmail());
-            even.setSex(user.getUserSex() == 1 ? "男" : "女");
-            listPeople.add(even);
-        }
-        String activityId = list.get(0).getOrAcid();
-        Activity activity =  activityService.getById(activityId);
+        if (list != null){
+            List<ListPerson> listPeople = new ArrayList<>();
+            for (Orders item:list) {
+                User user = userService.getOne(new QueryWrapper<User>().eq("user_id", item.getOrId()));
+                ListPerson even = new ListPerson();
+                even.setId(user.getUserId());
+                even.setName(user.getUserName());
+                even.setEmail(user.getUserEmail());
+                even.setSex(user.getUserSex() == 1 ? "男" : "女");
+                listPeople.add(even);
+            }
+            String activityId = list.get(0).getOrAcid();
+            Activity activity =  activityService.getById(activityId);
 
-        try {
-            ExportProvide.writeExcel(response, listPeople, activity.getActName(), "人员名单",ListPerson.class);
-        } catch (Exception exception) {
-            exception.printStackTrace();
+            try {
+                ExportProvide.writeExcel(response, listPeople, activity.getActName(), "人员名单",ListPerson.class);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
         }
     }
 

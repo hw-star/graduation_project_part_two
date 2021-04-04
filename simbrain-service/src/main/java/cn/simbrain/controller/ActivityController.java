@@ -2,11 +2,20 @@ package cn.simbrain.controller;
 
 import cn.simbrain.pojo.Activity;
 import cn.simbrain.pojo.ActivityBody;
+import cn.simbrain.provide.IsHaveRole;
 import cn.simbrain.service.ActivityService;
+import cn.simbrain.service.OrderRolesService;
+import cn.simbrain.util.Jwt;
 import cn.simbrain.util.Result;
 import cn.simbrain.util.ResultCode;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author huowei
@@ -18,9 +27,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/activity")
 public class ActivityController {
 
+    String[] roles = new String[]{"1","3","4"};
+
     @Autowired
     private ActivityService activityService;
-
+    @Autowired
+    private OrderRolesService orderRolesService;
 
     /**
      * @description: 条件查询带分页查询的功能(活动)
@@ -30,12 +42,19 @@ public class ActivityController {
      * @return: cn.simbrain.util.Result
      */
     @PostMapping("activitylist/{current}/{limit}")
+    @Cacheable(value = "activitys", key = "'activitysListPage'")
     public Result getUsersListPage(@PathVariable long current,
                                    @PathVariable long limit,
-                                   @RequestBody(required = false) ActivityBody activityBody) {
+                                   @RequestBody(required = false) ActivityBody activityBody,
+                                   HttpServletRequest request) {
+        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+        if (!result)
+            return Result.failure(ResultCode.DATA_NONE);
+        Claims claims = Jwt.parseJwt(request.getHeader("X-Token"));
+        String id = claims.getSubject();
         if (activityBody != null)
-            return activityService.getUsersListPage(current, limit, activityBody);
-        return activityService.getUsersListPage(current, limit);
+            return activityService.getUsersListPage(current, limit, activityBody, id);
+        return activityService.getUsersListPage(current, limit, id);
     }
 
     /**
@@ -44,7 +63,11 @@ public class ActivityController {
      * @return: cn.simbrain.util.Result
      */
     @DeleteMapping("/deleteactivity/{id}")
-    public Result deletedActivity(@PathVariable String id){
+    @CacheEvict(value="activitys", allEntries=true, key = "'activitysListPage'")
+    public Result deletedActivity(@PathVariable String id, HttpServletRequest request){
+        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+        if (!result)
+            return Result.failure(ResultCode.DATA_NONE);
         boolean res = activityService.removeById(id);
         if (res)
             return Result.success();
@@ -57,7 +80,10 @@ public class ActivityController {
      * @return: cn.simbrain.util.Result
      */
     @GetMapping("/getactivity/{id}")
-    public Result getActivity(@PathVariable String id){
+    public Result getActivity(@PathVariable String id, HttpServletRequest request){
+        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+        if (!result)
+            return Result.failure(ResultCode.DATA_NONE);
         Activity activity = activityService.getById(id);
         if (activity != null)
             return Result.success(activity);
@@ -70,7 +96,11 @@ public class ActivityController {
      * @return: cn.simbrain.util.Result
      */
     @PostMapping("/saveActivity")
-    public Result addActivity(@RequestBody Activity activity){
+    @CachePut(value="activitys", key = "'activitysListPage'")
+    public Result addActivity(@RequestBody Activity activity, HttpServletRequest request){
+        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+        if (!result)
+            return Result.failure(ResultCode.DATA_NONE);
         if (activity.getActName() == null || activity.getActDescription() == null || activity.getActNumber() == null){
             return Result.failure(ResultCode.PARAM_NOT_COMPLETE);
         }
@@ -90,7 +120,11 @@ public class ActivityController {
      */
     @GetMapping("/stopactivity/{id}/{stateCode}")
     public Result stopActivity(@PathVariable String id,
-                           @PathVariable Integer stateCode){
+                           @PathVariable Integer stateCode,
+                               HttpServletRequest request){
+        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+        if (!result)
+            return Result.failure(ResultCode.DATA_NONE);
         Activity activity = activityService.getById(id);
         activity.setActActive(stateCode);
         boolean res = activityService.updateById(activity);
@@ -105,7 +139,10 @@ public class ActivityController {
      * @return: cn.simbrain.util.Result
      */
     @PostMapping("/updateactivity")
-    public Result updateActivity(@RequestBody Activity activity){
+    public Result updateActivity(@RequestBody Activity activity, HttpServletRequest request){
+        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+        if (!result)
+            return Result.failure(ResultCode.DATA_NONE);
         boolean res = activityService.updateById(activity);
         if (res)
             return Result.success();

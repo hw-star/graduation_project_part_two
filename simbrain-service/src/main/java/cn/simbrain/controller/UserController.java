@@ -2,10 +2,11 @@ package cn.simbrain.controller;
 
 import cn.simbrain.mapper.UserMapper;
 import cn.simbrain.pojo.FindPwd.FindPwd;
-import cn.simbrain.pojo.SysUser;
 import cn.simbrain.pojo.User;
 import cn.simbrain.pojo.login.UserLogin;
 import cn.simbrain.provide.EmailProvide;
+import cn.simbrain.provide.IsHaveRole;
+import cn.simbrain.service.OrderRolesService;
 import cn.simbrain.service.UserService;
 import cn.simbrain.util.Jwt;
 import cn.simbrain.util.Result;
@@ -32,12 +33,16 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
 
+    String[] roles = new String[]{"1","2","4"};
+
     @Autowired
     private UserMapper userMapper;
     @Autowired
     private EmailProvide emailProvide;
     @Autowired
     private UserService userService;
+    @Autowired
+    private OrderRolesService orderRolesService;
 
     /**
      * @description: 用户登录
@@ -55,6 +60,9 @@ public class UserController {
         if (user == null){
             return Result.failure(ResultCode.USER_LOGIN_ERROR);
         }
+        if (user.getUserStop() == 1){
+            return Result.failure(ResultCode.USER_LOGIN_ERROR);
+        }
         if (userLogin.getUserLoginPwd().equals(user.getUserPwd())){
             String token = Jwt.createJwt(user.getId().toString(),user.getUserId(),true,user.getUserName());
             Map<String,String> map = new HashMap<>();
@@ -62,15 +70,6 @@ public class UserController {
             return Result.success(map);
         }
         return Result.failure(ResultCode.USER_LOGIN_ERROR);
-    }
-
-    @PostMapping("/register")
-    public Result insertUser(User user){
-        int result = userMapper.insert(user);
-        if (result > 0){
-            return Result.success();
-        }
-        return Result.failure(ResultCode.USER_HAS_EXISTED);
     }
 
     /**
@@ -111,7 +110,11 @@ public class UserController {
     @GetMapping("userlist/{current}/{limit}")
     public Result getUsersListPage(@PathVariable long current,
                                    @PathVariable long limit,
-                                   @RequestParam(value = "fuzzyquery",required = false) String fuzzyquery){
+                                   @RequestParam(value = "fuzzyquery",required = false) String fuzzyquery,
+                                   HttpServletRequest request){
+        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+        if (!result)
+            return Result.failure(ResultCode.DATA_NONE);
         Page<User> userPage = new Page<>(current,limit);
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         if (!"".equals(fuzzyquery)){
@@ -143,7 +146,10 @@ public class UserController {
      * @return: cn.simbrain.util.Result
      */
     @DeleteMapping("/deleteuser/{id}")
-    public Result deletedUser(@PathVariable String id){
+    public Result deletedUser(@PathVariable String id,HttpServletRequest request){
+        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+        if (!result)
+            return Result.failure(ResultCode.DATA_NONE);
         boolean res = userService.removeById(id);
         if (res)
             return Result.success();
@@ -156,7 +162,13 @@ public class UserController {
      * @return: cn.simbrain.util.Result
      */
     @PostMapping("adduser")
-    public Result addUser(@RequestBody User user){
+    public Result addUser(@RequestBody User user,HttpServletRequest request){
+        String token = request.getHeader("X-Token");
+        if (token != null){
+            boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+            if (!result)
+                return Result.failure(ResultCode.DATA_NONE);
+        }
         if (user.getUserId() == null || user.getUserPwd() == null || user.getUserEmail() == null)
             return Result.failure(ResultCode.PARAM_NOT_COMPLETE);
         QueryWrapper<User> wrapper = new QueryWrapper<>();
@@ -176,10 +188,11 @@ public class UserController {
      * @return: cn.simbrain.util.Result
      */
     @GetMapping("/getuser/{id}")
-    public Result getUser(@PathVariable String id){
-        QueryWrapper<User> wrapper = new QueryWrapper<>();
-        wrapper.eq("id",id.trim());
-        User user = userService.getOne(wrapper);
+    public Result getUser(@PathVariable String id, HttpServletRequest request){
+        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+        if (!result)
+            return Result.failure(ResultCode.DATA_NONE);
+        User user = userService.getById(id.trim());
         if (user == null)
             return Result.failure(ResultCode.DATA_NONE);
         return Result.success(user);
@@ -191,7 +204,15 @@ public class UserController {
      * @return: cn.simbrain.util.Result
      */
     @PostMapping("/updateuser")
-    public Result updateUser(@RequestBody User user){
+    public Result updateUser(@RequestBody User user, HttpServletRequest request){
+        Claims claims = Jwt.parseJwt(request.getHeader("X-Token"));
+        String id = claims.getSubject();
+        User userFind = userService.getOne(new QueryWrapper<User>().eq("user_id", id));
+        if (!userFind.getUserId().equals(user.getUserId())){
+            boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+            if (!result)
+                return Result.failure(ResultCode.DATA_NONE);
+        }
         User userInSql = userService.getById(user.getId());
         user.setUserId(userInSql.getUserId());
         boolean res = userService.updateById(user);
@@ -208,7 +229,11 @@ public class UserController {
      */
     @GetMapping("/stopuser/{id}/{stateCode}")
     public Result stopUser(@PathVariable String id,
-                           @PathVariable Integer stateCode){
+                           @PathVariable Integer stateCode,
+                           HttpServletRequest request){
+        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+        if (!result)
+            return Result.failure(ResultCode.DATA_NONE);
         User user = userService.getById(id);
         user.setUserStop(stateCode);
         boolean res = userService.updateById(user);
