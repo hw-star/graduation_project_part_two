@@ -22,6 +22,9 @@ public class IsHaveRole {
         Claims claims = Jwt.parseJwt(request.getHeader("X-Token"));
         String id = claims.getSubject();
         OrderRoles orderRoles = orderRolesService.getOne(new QueryWrapper<OrderRoles>().eq("sor_id", id));
+        if (orderRoles == null){
+            return true;
+        }
         String item = orderRoles.getSorRoid();
         for (String every:items) {
             if (every.equals(item))

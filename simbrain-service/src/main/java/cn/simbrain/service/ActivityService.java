@@ -20,6 +20,6 @@ public interface ActivityService extends IService<Activity> {
      * @Param limit: 每页数量
      * @return: cn.simbrain.util.Result 
      */
-    Result getUsersListPage(long current,long limit, String id);
-    Result getUsersListPage(long current, long limit, ActivityBody activityBody, String id);
+    Result getUsersListPage(long current,long limit, int num);
+    Result getUsersListPage(long current, long limit, ActivityBody activityBody, int num);
 }

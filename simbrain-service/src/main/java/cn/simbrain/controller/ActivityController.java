@@ -2,16 +2,17 @@ package cn.simbrain.controller;
 
 import cn.simbrain.pojo.Activity;
 import cn.simbrain.pojo.ActivityBody;
+import cn.simbrain.pojo.OrderRoles;
 import cn.simbrain.provide.IsHaveRole;
 import cn.simbrain.service.ActivityService;
 import cn.simbrain.service.OrderRolesService;
 import cn.simbrain.util.Jwt;
 import cn.simbrain.util.Result;
 import cn.simbrain.util.ResultCode;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,19 +43,29 @@ public class ActivityController {
      * @return: cn.simbrain.util.Result
      */
     @PostMapping("activitylist/{current}/{limit}")
-    @Cacheable(value = "activitys", key = "'activitysListPage'")
     public Result getUsersListPage(@PathVariable long current,
                                    @PathVariable long limit,
                                    @RequestBody(required = false) ActivityBody activityBody,
                                    HttpServletRequest request) {
-        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
-        if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
-        Claims claims = Jwt.parseJwt(request.getHeader("X-Token"));
-        String id = claims.getSubject();
+        int num = 0;
+        String token = request.getHeader("X-Token");
+        if (token == null){
+            num = 1;
+        }else {
+            boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+            if (!result)
+                return Result.failure(ResultCode.DATA_NONE);
+            Claims claims = Jwt.parseJwt(request.getHeader("X-Token"));
+            String id = claims.getSubject();
+            OrderRoles orderRoles = orderRolesService.getOne(new QueryWrapper<OrderRoles>().eq("sor_id", id));
+            if (orderRoles == null){
+               num = 1;
+            }
+        }
         if (activityBody != null)
-            return activityService.getUsersListPage(current, limit, activityBody, id);
-        return activityService.getUsersListPage(current, limit, id);
+            return activityService.getUsersListPage(current, limit, activityBody, num);
+        return activityService.getUsersListPage(current, limit, num);
+
     }
 
     /**
@@ -63,7 +74,6 @@ public class ActivityController {
      * @return: cn.simbrain.util.Result
      */
     @DeleteMapping("/deleteactivity/{id}")
-    @CacheEvict(value="activitys", allEntries=true, key = "'activitysListPage'")
     public Result deletedActivity(@PathVariable String id, HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
@@ -96,7 +106,6 @@ public class ActivityController {
      * @return: cn.simbrain.util.Result
      */
     @PostMapping("/saveActivity")
-    @CachePut(value="activitys", key = "'activitysListPage'")
     public Result addActivity(@RequestBody Activity activity, HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)

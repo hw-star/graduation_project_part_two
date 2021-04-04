@@ -9,6 +9,7 @@ import cn.simbrain.service.ActivityService;
 import cn.simbrain.service.OrderRolesService;
 import cn.simbrain.service.OrdersService;
 import cn.simbrain.util.Result;
+import cn.simbrain.util.ResultCode;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -36,8 +37,8 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityMapper, Activity> i
     private OrderRolesService orderRolesService;
 
     @Override
-    public Result getUsersListPage(long current, long limit, String id) {
-        return this.getUsersListPage(current,limit,new ActivityBody("","",""), id);
+    public Result getUsersListPage(long current, long limit, int num) {
+        return this.getUsersListPage(current,limit,new ActivityBody("","",""), num);
     }
 
     /**
@@ -48,7 +49,7 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityMapper, Activity> i
      * @return: cn.simbrain.util.Result
      */
     @Override
-    public Result getUsersListPage(long current, long limit, ActivityBody activityBody, String id) {
+    public Result getUsersListPage(long current, long limit, ActivityBody activityBody, int nums) {
         Page<Activity> activityPage = new Page<>(current,limit);
         QueryWrapper<Activity> wrapper = new QueryWrapper<>();
         String fuzzyquery = activityBody.getFuzzyquery();
@@ -73,13 +74,14 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityMapper, Activity> i
                         .or().like("act_name",fuzzyquery);
             }
         }
-        OrderRoles orderRoles = orderRolesService.getOne(new QueryWrapper<OrderRoles>().eq("sor_id", id));
-        if (orderRoles == null)
-            wrapper.ne("act_active", 0);
+        if (nums == 1)
+            wrapper.eq("act_active", 1);
         wrapper.orderByDesc("act_update");
         activityMapper.selectPage(activityPage,wrapper);
         long total = activityPage.getTotal();
         List<Activity> records = activityPage.getRecords();
+        if (records == null)
+            return Result.failure(ResultCode.DATA_NONE);
         for (Activity list:records){
             int num = ordersService.count(new QueryWrapper<Orders>().eq("or_acid",list.getId()));
             list.setActNumbered(num);

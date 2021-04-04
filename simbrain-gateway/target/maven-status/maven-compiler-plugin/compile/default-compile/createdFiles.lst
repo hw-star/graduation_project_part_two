@@ -1,0 +1,4 @@
+cn\simbrain\config\CorsConfig.class
+cn\simbrain\filter\AuthGlobalFilter.class
+cn\simbrain\controller\FallBackController.class
+cn\simbrain\GatewayApplication.class

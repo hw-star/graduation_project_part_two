@@ -9,6 +9,7 @@ import cn.simbrain.util.Result;
 import cn.simbrain.util.ResultCode;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +37,7 @@ public class RoleController {
      * @return: cn.simbrain.util.Result
      */
     @GetMapping("/rolelist")
+    @Cacheable(value = "rolelist", key = "'role'")
     public Result getRolesList(HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
