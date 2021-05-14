@@ -40,4 +40,5 @@ cn\simbrain\provide\ErrorException.class
 cn\simbrain\service\ActivityService.class
 cn\simbrain\service\UserService.class
 cn\simbrain\controller\ActivityController.class
+cn\simbrain\provide\ReadExcelProvide.class
 cn\simbrain\service\impl\UserServiceImpl.class

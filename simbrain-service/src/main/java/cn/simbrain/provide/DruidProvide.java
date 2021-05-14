@@ -28,8 +28,8 @@ public class DruidProvide {
     public ServletRegistrationBean servletRegistrationBean(){
         ServletRegistrationBean<StatViewServlet> bean = new ServletRegistrationBean<>(new StatViewServlet(),"/druid/*");
         Map<String,String> map = new HashMap<>();
-        map.put(StatViewServlet.PARAM_NAME_USERNAME,"admin");
-        map.put(StatViewServlet.PARAM_NAME_PASSWORD,"youngvolunteer");
+        map.put(StatViewServlet.PARAM_NAME_USERNAME,"simbrain");
+        map.put(StatViewServlet.PARAM_NAME_PASSWORD,"huowei");
         map.put(StatViewServlet.PARAM_NAME_ALLOW,"");
         map.put(StatViewServlet.PARAM_NAME_DENY,"");
         bean.setInitParameters(map);
