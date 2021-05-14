@@ -12,6 +12,7 @@ import cn.simbrain.util.Jwt;
 import cn.simbrain.util.Result;
 import cn.simbrain.util.ResultCode;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mysql.jdbc.StringUtils;
 import io.jsonwebtoken.Claims;

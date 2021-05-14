@@ -12,6 +12,7 @@ import cn.simbrain.util.Jwt;
 import cn.simbrain.util.Result;
 import cn.simbrain.util.ResultCode;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mysql.jdbc.StringUtils;
 import io.jsonwebtoken.Claims;
@@ -206,16 +207,31 @@ public class UserController {
     @PostMapping("/updateuser")
     public Result updateUser(@RequestBody User user, HttpServletRequest request){
         Claims claims = Jwt.parseJwt(request.getHeader("X-Token"));
-        String id = claims.getSubject();
-        User userFind = userService.getOne(new QueryWrapper<User>().eq("user_id", id));
-        if (!userFind.getUserId().equals(user.getUserId())){
-            boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
-            if (!result)
-                return Result.failure(ResultCode.DATA_NONE);
-        }
-        User userInSql = userService.getById(user.getId());
-        user.setUserId(userInSql.getUserId());
-        boolean res = userService.updateById(user);
+        String userId = claims.getSubject();
+        String id = claims.getId();
+        UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
+        user.setId(Long.parseLong(id));
+        user.setUserId(userId);
+        updateWrapper.eq("id",id);
+        boolean res = userService.update(user, updateWrapper);
+        if (res)
+            return Result.success();
+        return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
+    }
+
+    /**
+     * @description: 管理员更新用户
+     * @Param user: 用户实体类
+     * @return: cn.simbrain.util.Result
+     */
+    @PostMapping("/sysupdate")
+    public Result updateTheUser(@RequestBody User user, HttpServletRequest request){
+        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+        if (!result)
+            return Result.failure(ResultCode.DATA_NONE);
+        UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id", user.getId());
+        boolean res = userService.update(user, updateWrapper);
         if (res)
             return Result.success();
         return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
