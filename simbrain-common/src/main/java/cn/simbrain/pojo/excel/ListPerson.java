@@ -39,5 +39,4 @@ public class ListPerson {
      */
     @ExcelProperty("邮箱")
     private String email;
-
 }

@@ -23,6 +23,10 @@ public class ErrorTogether {
     @ResponseBody
     public Result errorReturn(Exception exception){
         exception.printStackTrace();
+        String msg = exception.getMessage();
+        if ("数据为空".equals(msg)){
+            return Result.failure(ResultCode.DATA_NONE);
+        }
         return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
     }
 }

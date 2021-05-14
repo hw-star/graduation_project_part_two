@@ -1,5 +1,6 @@
 package cn.simbrain.provide;
 
+import cn.simbrain.pojo.User;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import com.alibaba.excel.write.metadata.style.WriteCellStyle;
@@ -22,6 +23,15 @@ import java.util.List;
 public class ExportProvide {
 
     /**
+     * @description: 读取Excel
+     * @Param file: Excel
+     * @return: void
+     */
+    public static void readExcel(String file){
+        EasyExcel.read(file, User.class, new ReadExcelProvide()).sheet().doRead();
+    }
+
+    /**
      * 导出 Excel ：一个 sheet，带表头.
      * @param response  HttpServletResponse
      * @param  data      数据 list，每个元素为一个 BaseRowModel
@@ -30,7 +40,6 @@ public class ExportProvide {
      * @param model     映射实体类，Excel 模型
      * @throws Exception 异常
      */
-
     public static void writeExcel(HttpServletResponse response, List<? extends Object> data, String fileName, String sheetName, Class model) throws Exception {
 
         // 头的策略

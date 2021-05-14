@@ -36,6 +36,7 @@ cn\simbrain\provide\MybatisPlusProvide.class
 cn\simbrain\service\impl\OrdersRolesServiceImpl.class
 cn\simbrain\controller\OssController.class
 cn\simbrain\mapper\RoleMapper.class
+cn\simbrain\provide\ErrorException.class
 cn\simbrain\service\ActivityService.class
 cn\simbrain\service\UserService.class
 cn\simbrain\controller\ActivityController.class

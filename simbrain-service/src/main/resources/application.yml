@@ -10,9 +10,6 @@ eureka:
     ip-address: true
 info:
   app.name: 毕业设计-NUC-霍伟
-mybatis-plus:
-  # configuration:
-  #  log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     db-config:
       logic-delete-field: flag
@@ -54,9 +51,9 @@ spring:
       datasource:
         master:
           # driver-class-name: com.mysql.jdbc.Driver
-          url: jdbc:mysql://localhost:3306/young_volunteers?characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+          url: jdbc:mysql://39.97.253.156:3306/young_volunteers?characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true
           username: root
-          password: admin
+          password: HUOwei417510..
         slave:
           # driver-class-name: com.mysql.jdbc.Driver
           url: jdbc:mysql://rm-2ze74oti27q9u66ny4o.mysql.rds.aliyuncs.com:3306/graduation_project_part_two?characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
@@ -82,3 +79,6 @@ spring:
               stat:
                 mergeSql: true
                 slowSqlMillis: 500
+mybatis-plus:
+  #configuration:
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

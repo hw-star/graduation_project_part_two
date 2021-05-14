@@ -10,12 +10,11 @@ import cn.simbrain.service.OrdersService;
 import cn.simbrain.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,5 +60,16 @@ public class ExcelController {
             }
         }
     }
+
+    /**
+     * @description: 批量注册普通用户
+     * @Param file: excel 文件
+     * @return: void
+     */
+    @PostMapping("/postexcel")
+    public void postExcel(MultipartFile file){
+        userService.saveExcel(file,userService);
+    }
+
 
 }

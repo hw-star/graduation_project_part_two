@@ -2,6 +2,7 @@ package cn.simbrain.service;
 
 import cn.simbrain.pojo.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author huowei
@@ -10,4 +11,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @date 2021/2/14
  */
 public interface UserService extends IService<User> {
+    void saveExcel(MultipartFile file, UserService userService);
 }

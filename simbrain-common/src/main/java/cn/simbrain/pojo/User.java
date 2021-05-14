@@ -1,9 +1,12 @@
 package cn.simbrain.pojo;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -15,7 +18,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class User implements Serializable {
     /**
      *
      * 主键 ID
@@ -26,26 +29,31 @@ public class User {
      *
      * 用户账号
      */
+    @ExcelProperty(index = 0)
     private String userId;
     /**
      *
      * 用户密码
      */
+    @ExcelProperty(index = 1)
     private String userPwd;
     /**
      * 用户邮箱
      * 忘记密码使用
      */
+    @ExcelProperty(index = 2)
     private String userEmail;
     /**
      *
      * 用户性别
      */
+    @ExcelProperty(index = 4)
     private Integer userSex;
     /**
      *
      * 用户名字
      */
+    @ExcelProperty(index = 3)
     private String userName;
     /**
      *
