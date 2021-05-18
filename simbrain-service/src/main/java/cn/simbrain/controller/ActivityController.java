@@ -52,14 +52,14 @@ public class ActivityController {
         if (token == null){
             num = 1;
         }else {
-            boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
-            if (!result)
-                return Result.failure(ResultCode.DATA_NONE);
             Claims claims = Jwt.parseJwt(request.getHeader("X-Token"));
-            String id = claims.getSubject();
-            OrderRoles orderRoles = orderRolesService.getOne(new QueryWrapper<OrderRoles>().eq("sor_id", id));
-            if (orderRoles == null){
-               num = 1;
+            boolean isUser = (boolean) claims.get("user");
+            if (isUser){
+                num = 1;
+            }else {
+                boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+                if (!result)
+                    return Result.failure(ResultCode.DATA_NONE);
             }
         }
         if (activityBody != null)

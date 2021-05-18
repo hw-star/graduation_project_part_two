@@ -39,7 +39,7 @@ public class Jwt {
      * @Param isLogin: 是否登录
      * @return: java.lang.String
      */
-    public static String createJwt(String id, String userId, Boolean isLogin, String name){
+    public static String createJwt(String id, String userId, Boolean isLogin, String name, boolean isUser){
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
         JwtBuilder jwtBuilder = Jwts.builder().setId(id)
@@ -47,7 +47,8 @@ public class Jwt {
                 .setIssuedAt(now)
                 .signWith(SignatureAlgorithm.HS256,secretKey)
                 .claim("isLogin",isLogin)
-                .claim("name", name);
+                .claim("name", name)
+                .claim("user", isUser);
         if (expires > 0){
             jwtBuilder.setExpiration(new Date(nowMillis + expires*1000));
         }

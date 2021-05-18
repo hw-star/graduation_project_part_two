@@ -3,10 +3,8 @@ package cn.simbrain.service.impl;
 import cn.simbrain.mapper.ActivityMapper;
 import cn.simbrain.pojo.Activity;
 import cn.simbrain.pojo.ActivityBody;
-import cn.simbrain.pojo.OrderRoles;
 import cn.simbrain.pojo.Orders;
 import cn.simbrain.service.ActivityService;
-import cn.simbrain.service.OrderRolesService;
 import cn.simbrain.service.OrdersService;
 import cn.simbrain.util.Result;
 import cn.simbrain.util.ResultCode;
@@ -33,8 +31,6 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityMapper, Activity> i
     private ActivityMapper activityMapper;
     @Autowired
     private OrdersService ordersService;
-    @Autowired
-    private OrderRolesService orderRolesService;
 
     @Override
     public Result getUsersListPage(long current, long limit, int num) {

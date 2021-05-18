@@ -4,15 +4,21 @@ import cn.simbrain.pojo.Activity;
 import cn.simbrain.pojo.Orders;
 import cn.simbrain.pojo.User;
 import cn.simbrain.pojo.excel.ListPerson;
+import cn.simbrain.provide.ErrorException;
 import cn.simbrain.provide.ExportProvide;
+import cn.simbrain.provide.IsHaveRole;
 import cn.simbrain.service.ActivityService;
+import cn.simbrain.service.OrderRolesService;
 import cn.simbrain.service.OrdersService;
 import cn.simbrain.service.UserService;
+import cn.simbrain.util.Result;
+import cn.simbrain.util.ResultCode;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.util.ArrayList;
@@ -28,16 +34,24 @@ import java.util.List;
 @RequestMapping("/excel")
 public class ExcelController {
 
+    String[] rolesGet = new String[]{"1","3","4"};
+    String[] rolesPost = new String[]{"1","2","4"};
+
     @Autowired
     private OrdersService ordersService;
     @Autowired
     private UserService userService;
     @Autowired
     private ActivityService activityService;
+    @Autowired
+    private OrderRolesService orderRolesService;
 
 
     @GetMapping("/getexcel/{id}")
-    public void getExcelList(@PathVariable String id, HttpServletResponse response) {
+    public void getExcelList(@PathVariable String id,HttpServletRequest request, HttpServletResponse response) throws ErrorException {
+        boolean result = IsHaveRole.isHave(request,rolesGet,orderRolesService);
+        if (!result)
+            throw new ErrorException("无权限");
         List<Orders> list = ordersService.list(new QueryWrapper<Orders>().eq("or_acid",id));
         if (list != null){
             List<ListPerson> listPeople = new ArrayList<>();
@@ -67,7 +81,10 @@ public class ExcelController {
      * @return: void
      */
     @PostMapping("/postexcel")
-    public void postExcel(MultipartFile file){
+    public void postExcel(MultipartFile file, HttpServletRequest request) throws ErrorException {
+        boolean result = IsHaveRole.isHave(request,rolesPost,orderRolesService);
+        if (!result)
+            throw new ErrorException("无权限");
         userService.saveExcel(file,userService);
     }
 

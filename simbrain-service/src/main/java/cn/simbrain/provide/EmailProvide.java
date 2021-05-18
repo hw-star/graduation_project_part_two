@@ -27,9 +27,9 @@ public class EmailProvide {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage,false,"utf-8");
             mimeMessageHelper.setSubject("密码找回");
             if (type)
-                mimeMessageHelper.setText("<h2 style='color:#f40'>类型：管理员</h2>"+"<h2 style='color:#409EFF'>账号："+userId+"</h2>"+"<h2 style='color:#409EFF'>密码："+userPwd+"</h2>"+"<h3 style='color:#87CEFA'>请妥善保管密码。</h3>"+"<h3><a style='color:#87CEFA;text-decoration：none !important;' href='http://www.baidu.com'>返回青年志愿者服务</a></h3>",true);
+                mimeMessageHelper.setText("<h2 style='color:#f40'>类型：管理员</h2>"+"<h2 style='color:#409EFF'>账号："+userId+"</h2>"+"<h2 style='color:#409EFF'>密码："+userPwd+"</h2>"+"<h3 style='color:#87CEFA'>请妥善保管密码。</h3>"+"<h3><a style='color:#87CEFA;text-decoration：none !important;' href='http://www.bishe.link/admin/'>返回青年志愿者后台</a></h3>",true);
             else
-                mimeMessageHelper.setText("<h2 style='color:#f40'>类型：普通用户</h2>"+"<h2 style='color:#409EFF'>账号："+userId+"</h2>"+"<h2 style='color:#409EFF'>密码："+userPwd+"</h2>"+"<h3 style='color:#87CEFA'>请妥善保管密码。</h3>"+"<h3><a style='color:#87CEFA;text-decoration：none !important;' href='http://www.baidu.com'>返回青年志愿者服务</a></h3>",true);
+                mimeMessageHelper.setText("<h2 style='color:#f40'>类型：普通用户</h2>"+"<h2 style='color:#409EFF'>账号："+userId+"</h2>"+"<h2 style='color:#409EFF'>密码："+userPwd+"</h2>"+"<h3 style='color:#87CEFA'>请妥善保管密码。</h3>"+"<h3><a style='color:#87CEFA;text-decoration：none !important;' href='http://www.bishe.link'>返回青年志愿者服务</a></h3>",true);
             mimeMessageHelper.setFrom(EMAIL_FROM_ID);
             mimeMessageHelper.setTo(userEmail);
             javaMailSender.send(mimeMessage);
