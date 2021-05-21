@@ -1,9 +1,12 @@
 package cn.simbrain.pojo;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -15,7 +18,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Activity {
+public class Activity implements Serializable {
     /**
      *
      * 主键 ID
@@ -72,4 +75,15 @@ public class Activity {
      * 是否启用
      */
     private Integer actActive;
+    /**
+     *
+     * 活动开始时间
+     */
+    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd")
+    private Date actTime;
+    /**
+     *
+     * 活动出发地点
+     */
+    private String actAddress;
 }

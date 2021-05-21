@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -268,6 +269,19 @@ public class SysUserController {
             return Result.success();
         return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
 
+    }
+
+    /**
+     * @description: 批量删除管理员
+     * @Param ids: id
+     * @return: cn.simbrain.util.Result
+     */
+    @PostMapping("/moredeletesysuser")
+    public Result moreDeleteUsers(@RequestBody String[] ids){
+        boolean res = sysUserService.removeByIds(Arrays.asList(ids));
+        if (res)
+            return Result.success();
+        return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
     }
 
     /**

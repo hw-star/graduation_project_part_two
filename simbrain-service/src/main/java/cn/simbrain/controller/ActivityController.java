@@ -2,21 +2,18 @@ package cn.simbrain.controller;
 
 import cn.simbrain.pojo.Activity;
 import cn.simbrain.pojo.ActivityBody;
-import cn.simbrain.pojo.OrderRoles;
 import cn.simbrain.provide.IsHaveRole;
 import cn.simbrain.service.ActivityService;
 import cn.simbrain.service.OrderRolesService;
 import cn.simbrain.util.Jwt;
 import cn.simbrain.util.Result;
 import cn.simbrain.util.ResultCode;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 
 /**
  * @author huowei
@@ -153,6 +150,19 @@ public class ActivityController {
         if (!result)
             return Result.failure(ResultCode.DATA_NONE);
         boolean res = activityService.updateById(activity);
+        if (res)
+            return Result.success();
+        return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
+    }
+
+    /**
+     * @description: 批量删除志愿活动
+     * @Param ids: id
+     * @return: cn.simbrain.util.Result
+     */
+    @PostMapping("/moredeleteactivity")
+    public Result moreDeleteActivity(@RequestBody String[] ids){
+        boolean res = activityService.removeByIds(Arrays.asList(ids));
         if (res)
             return Result.success();
         return Result.failure(ResultCode.SYSTEM_INNER_ERROR);

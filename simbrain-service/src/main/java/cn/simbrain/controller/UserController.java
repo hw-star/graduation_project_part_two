@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -275,6 +276,20 @@ public class UserController {
             return Result.success();
         return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
     }
+
+    /**
+     * @description: 批量删除普通用户
+     * @Param ids: id
+     * @return: cn.simbrain.util.Result
+     */
+    @PostMapping("/moredeleteuser")
+    public Result moreDeleteUsers(@RequestBody String[] ids){
+        boolean res = userService.removeByIds(Arrays.asList(ids));
+        if (res)
+            return Result.success();
+        return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
+    }
+
 
     /**
      * @description: 用户退出
