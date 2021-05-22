@@ -112,6 +112,9 @@ public class OrdersController {
         Orders orders = ordersService.getOne(new QueryWrapper<Orders>().eq("or_id",user.getUserId()).eq("or_acid",acid));
         if (orders != null)
             return Result.failure(ResultCode.DATA_EXISTED);
+        int num = ordersService.count(new QueryWrapper<Orders>().eq("or_acid",acid));
+        if (num > activity.getActNumber())
+            return Result.failure(ResultCode.DATA_WRONG);
         Orders or = new Orders();
         or.setOrAcid(acid);
         or.setOrEmail(user.getUserEmail());
