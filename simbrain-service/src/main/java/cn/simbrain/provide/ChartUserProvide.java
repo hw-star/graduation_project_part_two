@@ -33,7 +33,7 @@ public class ChartUserProvide {
         ChartUser chartUser = new ChartUser();
         chartUser.setUser(userService.count());
         int number = roleService.count();
-        int[] sysUser = new int[6];
+        int[] sysUser = new int[7];
         for (int i = 1; i <=number; i++ ){
             int res = orderRolesService.count(new QueryWrapper<OrderRoles>().eq("sor_roid",i));
             sysUser[i] = res;

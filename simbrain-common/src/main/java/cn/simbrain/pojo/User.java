@@ -63,7 +63,7 @@ public class User implements Serializable {
     private Integer version;
     /**
      * 逻辑删除
-     * 冻结处理(可能)
+     * 冻结处理
      */
     @TableLogic
     private Integer deleted;
