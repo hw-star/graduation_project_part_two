@@ -46,11 +46,6 @@ public class LogSuccess implements Serializable {
     private String requestSignature;
     /**
      *
-     * 请求参数
-     */
-    private String requestParam;
-    /**
-     *
      * 请求浏览器
      */
     private String requestBrowser;
@@ -76,11 +71,6 @@ public class LogSuccess implements Serializable {
      * 请求耗时
      */
     private String requestTime;
-    /**
-     *
-     * 请求结果
-     */
-    private String requestResult;
     /**
      *
      * 操作人
