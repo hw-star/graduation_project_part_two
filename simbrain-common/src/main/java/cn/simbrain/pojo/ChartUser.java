@@ -36,7 +36,7 @@ public class ChartUser {
     private Integer adminActivity;
     /**
      *
-     * 用户和活动管理员数量
+     * 用户、活动以及文件管理员数量
      */
     private Integer adminTwo;
     /**
@@ -44,6 +44,11 @@ public class ChartUser {
      * 无权限管理员数量
      */
     private Integer adminNull;
+    /**
+     *
+     * 文件管理员数量
+     */
+    private Integer adminPolicy;
     /**
      *
      * 活动数量

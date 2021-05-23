@@ -10,6 +10,7 @@ cn\simbrain\pojo\SysUser.class
 cn\simbrain\pojo\LogFailure.class
 cn\simbrain\pojo\FindPwd\FindPwd.class
 cn\simbrain\util\Jwt.class
+cn\simbrain\pojo\Policy.class
 cn\simbrain\pojo\login\UserLogin.class
 cn\simbrain\pojo\ActivityBody.class
 cn\simbrain\pojo\LogDataMsg.class

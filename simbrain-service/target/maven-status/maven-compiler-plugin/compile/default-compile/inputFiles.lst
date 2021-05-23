@@ -2,6 +2,7 @@ F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\ja
 F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\java\cn\simbrain\mapper\OrderRolesMapper.java
 F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\java\cn\simbrain\service\impl\OrdersRolesServiceImpl.java
 F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\java\cn\simbrain\mapper\RoleMapper.java
+F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\java\cn\simbrain\service\impl\PolicyServiceImpl.java
 F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\java\cn\simbrain\service\impl\SysUserServiceImpl.java
 F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\java\cn\simbrain\provide\ChartUserProvide.java
 F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\java\cn\simbrain\provide\EmailProvide.java
@@ -15,6 +16,7 @@ F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\ja
 F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\java\cn\simbrain\service\LogService\LogSuccessService.java
 F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\java\cn\simbrain\mapper\ActivityMapper.java
 F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\java\cn\simbrain\service\UserService.java
+F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\java\cn\simbrain\controller\PolicyController.java
 F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\java\cn\simbrain\mapper\logmapper\LogFailureMapper.java
 F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\java\cn\simbrain\service\OrderRolesService.java
 F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\java\cn\simbrain\provide\MybatisPlusProvide.java
@@ -25,6 +27,7 @@ F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\ja
 F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\java\cn\simbrain\service\LogService\LogFailureService.java
 F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\java\cn\simbrain\provide\DruidProvide.java
 F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\java\cn\simbrain\service\OrdersService.java
+F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\java\cn\simbrain\mapper\PolicyMapper.java
 F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\java\cn\simbrain\config\RedisConfig.java
 F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\java\cn\simbrain\controller\OrdersController.java
 F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\java\cn\simbrain\mapper\logmapper\LogSuccessMapper.java
@@ -40,5 +43,6 @@ F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\ja
 F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\java\cn\simbrain\provide\IsHaveRole.java
 F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\java\cn\simbrain\service\impl\OssServiceImpl.java
 F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\java\cn\simbrain\controller\ActivityController.java
+F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\java\cn\simbrain\service\PolicyService.java
 F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\java\cn\simbrain\controller\UserController.java
 F:\Spring-boot-Projects\graduation_project_part_two\simbrain-service\src\main\java\cn\simbrain\provide\ExportProvide.java

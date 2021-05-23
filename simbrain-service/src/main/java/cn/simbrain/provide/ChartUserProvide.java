@@ -43,6 +43,7 @@ public class ChartUserProvide {
         chartUser.setAdminActivity(sysUser[3]);
         chartUser.setAdminTwo(sysUser[4]);
         chartUser.setAdminNull(sysUser[5]);
+        chartUser.setAdminPolicy(sysUser[6]);
         chartUser.setActivityNumber(activityService.count());
         return Result.success(chartUser);
     }
