@@ -161,7 +161,10 @@ public class ActivityController {
      * @return: cn.simbrain.util.Result
      */
     @PostMapping("/moredeleteactivity")
-    public Result moreDeleteActivity(@RequestBody String[] ids){
+    public Result moreDeleteActivity(@RequestBody String[] ids,HttpServletRequest request){
+        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+        if (!result)
+            return Result.failure(ResultCode.DATA_NONE);
         boolean res = activityService.removeByIds(Arrays.asList(ids));
         if (res)
             return Result.success();

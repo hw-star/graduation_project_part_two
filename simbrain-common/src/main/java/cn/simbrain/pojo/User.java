@@ -47,7 +47,6 @@ public class User implements Serializable {
      *
      * 用户性别
      */
-    @ExcelProperty(index = 4)
     private Integer userSex;
     /**
      *
@@ -89,4 +88,11 @@ public class User implements Serializable {
      * 用户状态(是否禁用)
      */
     private Integer userStop;
+    /**
+     *
+     * 批量导入普通用户时，性别使用(Mysql中不存在)
+     */
+    @TableField(exist = false)
+    @ExcelProperty(index = 4)
+    private String userSexData;
 }

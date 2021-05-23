@@ -41,6 +41,13 @@ public class ReadExcelProvide extends AnalysisEventListener<User> {
         if (this.existOneData(userService,user.getUserId()) != null){
             return;
         }
+        if ("男".equals(user.getUserSexData())){
+            user.setUserSex(1);
+        }else if ("女".equals(user.getUserSexData())){
+            user.setUserSex(0);
+        }else {
+            return;
+        }
         userService.save(user);
     }
 

@@ -283,13 +283,15 @@ public class UserController {
      * @return: cn.simbrain.util.Result
      */
     @PostMapping("/moredeleteuser")
-    public Result moreDeleteUsers(@RequestBody String[] ids){
+    public Result moreDeleteUsers(@RequestBody String[] ids,HttpServletRequest request){
+        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+        if (!result)
+            return Result.failure(ResultCode.DATA_NONE);
         boolean res = userService.removeByIds(Arrays.asList(ids));
         if (res)
             return Result.success();
         return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
     }
-
 
     /**
      * @description: 用户退出

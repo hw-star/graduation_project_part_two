@@ -236,16 +236,9 @@ public class SysUserController {
      */
     @PostMapping("/updatesysuser")
     public Result updatesysUser(@RequestBody SysUser sysUser, HttpServletRequest request){
-        Claims claims = Jwt.parseJwt(request.getHeader("X-Token"));
-        String id = claims.getSubject();
-        SysUser sysUserFind = sysUserService.getOne(new QueryWrapper<SysUser>().eq("sys_id", id));
-        if (!sysUserFind.getSysId().equals(sysUser.getSysId())){
-            boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
-            if (!result)
-                return Result.failure(ResultCode.DATA_NONE);
-        }
-        SysUser sysUserInSql = sysUserService.getById(sysUser.getId());
-        sysUser.setSysId(sysUserInSql.getSysId());
+        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+        if (!result)
+            return Result.failure(ResultCode.DATA_NONE);
         boolean res = sysUserService.updateById(sysUser);
         if (res)
             return Result.success();
@@ -277,7 +270,10 @@ public class SysUserController {
      * @return: cn.simbrain.util.Result
      */
     @PostMapping("/moredeletesysuser")
-    public Result moreDeleteUsers(@RequestBody String[] ids){
+    public Result moreDeleteUsers(@RequestBody String[] ids,HttpServletRequest request){
+        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
+        if (!result)
+            return Result.failure(ResultCode.DATA_NONE);
         boolean res = sysUserService.removeByIds(Arrays.asList(ids));
         if (res)
             return Result.success();
