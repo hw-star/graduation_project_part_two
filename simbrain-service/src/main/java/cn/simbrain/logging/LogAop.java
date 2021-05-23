@@ -101,6 +101,8 @@ public class LogAop {
             logSuccess.setRequestIp(ip);
             // 请求方法
             logSuccess.setRequestSignature(joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
+            // 请求参数
+            logSuccess.setRequestParam(Arrays.toString(joinPoint.getArgs()));
             // 浏览器
             logSuccess.setRequestBrowser(userAgent.getBrowser().toString());
             // 操作系统
@@ -113,6 +115,7 @@ public class LogAop {
             logFailure.setRequestName(name);
             logFailure.setRequestIp(ip);
             logFailure.setRequestSignature(joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
+            logFailure.setRequestParam(Arrays.toString(joinPoint.getArgs()));
             logFailure.setRequestBrowser(userAgent.getBrowser().toString());
             logFailure.setRequestSystem(userAgent.getOperatingSystem().toString());
         }catch (Exception e){
@@ -133,6 +136,9 @@ public class LogAop {
         logSuccess.setRequestTime(new DateTime().toString("yyyy-MM-dd HH:mm:ss"));
         // 请求耗时
         logSuccess.setFinishTime(Long.toString(endTime - startTime));
+        // 请求返回
+        if (ret!=null)
+            logSuccess.setRequestResult(ret.toString());
         logSuccessService.insertMsg(logSuccess);
     }
 
@@ -146,6 +152,8 @@ public class LogAop {
         // 异常日志记录
         // 发生异常时间
         logFailure.setErrorTime(new DateTime().toString("yyyy-MM-dd HH:mm:ss"));
+        // 抛出异常
+        logFailure.setErrorMessage(throwable.getMessage());
         logFailureService.insertMsg(logFailure);
     }
 }

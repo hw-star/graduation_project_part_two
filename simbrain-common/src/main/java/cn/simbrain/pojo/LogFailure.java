@@ -46,6 +46,11 @@ public class LogFailure implements Serializable {
         private String requestSignature;
         /**
          *
+         * 请求参数
+         */
+        private String requestParam;
+        /**
+         *
          * 请求浏览器
          */
         private String requestBrowser;
@@ -66,6 +71,11 @@ public class LogFailure implements Serializable {
          * 异常时间
          */
         private String errorTime;
+        /**
+         *
+         * 异常信息
+         */
+        private  String errorMessage;
         /**
          *
          * 操作人
