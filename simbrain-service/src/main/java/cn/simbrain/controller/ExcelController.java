@@ -46,9 +46,9 @@ public class ExcelController {
 
     @GetMapping("/getexcel/{id}")
     public void getExcelList(@PathVariable String id,HttpServletRequest request, HttpServletResponse response) throws ErrorException {
-        boolean result = IsHaveRole.isHave(request,rolesGet,orderRolesService);
-        if (!result)
-            throw new ErrorException("无权限");
+//        boolean result = IsHaveRole.isHave(request,rolesGet,orderRolesService);
+//        if (!result)
+//            throw new ErrorException("无权限");
         List<Orders> list = ordersService.list(new QueryWrapper<Orders>().eq("or_acid",id));
         if (list != null){
             List<ListPerson> listPeople = new ArrayList<>();
