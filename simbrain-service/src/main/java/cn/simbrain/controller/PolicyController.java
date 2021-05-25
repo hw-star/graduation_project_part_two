@@ -45,30 +45,10 @@ public class PolicyController {
      */
     @PostMapping("policylist/{current}/{limit}")
     public Result getPolicyListPage(@PathVariable long current,
-                                   @PathVariable long limit,
-                                   HttpServletRequest request){
-        // 1:普通用户 0:管理员
-        int num = 0;
-        String token = request.getHeader("X-Token");
-        if (token == null){
-            num = 1;
-        }else {
-            Claims claims = Jwt.parseJwt(request.getHeader("X-Token"));
-            boolean isUser = (boolean) claims.get("user");
-            if (isUser){
-                num = 1;
-            }else {
-                boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
-                if (!result)
-                    return Result.failure(ResultCode.DATA_NONE);
-            }
-        }
+                                   @PathVariable long limit){
         Page<Policy> policyPage = new Page<>(current,limit);
         QueryWrapper<Policy> wrapper = new QueryWrapper<>();
-        if (num == 1){
-            wrapper.or().eq("po_active",1);
-        }
-        wrapper.orderByDesc("po_time");
+        wrapper.eq("po_active",1).orderByDesc("po_time");
         policyService.page(policyPage,wrapper);
         long total = policyPage.getTotal();
         List<Policy> records = policyPage.getRecords();

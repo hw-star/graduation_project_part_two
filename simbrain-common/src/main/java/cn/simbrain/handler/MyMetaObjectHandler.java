@@ -24,6 +24,10 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         this.setFieldValByName("sysUpdate",new Date(),metaObject);
         this.setFieldValByName("poCreate",new Date(),metaObject);
         this.setFieldValByName("poUpdate",new Date(),metaObject);
+        this.setFieldValByName("noCreate",new Date(),metaObject);
+        this.setFieldValByName("noUpdate",new Date(),metaObject);
+        this.setFieldValByName("elCreate",new Date(),metaObject);
+        this.setFieldValByName("elUpdate",new Date(),metaObject);
 
     }
 
@@ -33,5 +37,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         this.setFieldValByName("userUpdate",new Date(),metaObject);
         this.setFieldValByName("sysUpdate",new Date(),metaObject);
         this.setFieldValByName("poUpdate",new Date(),metaObject);
+        this.setFieldValByName("noUpdate",new Date(),metaObject);
+        this.setFieldValByName("elUpdate",new Date(),metaObject);
     }
 }
