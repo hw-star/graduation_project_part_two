@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 /**
  * @author huowei
  * @version 1.0.0
- * @description TODO
+ * @description 用户、管理员、活动数据量实体
  * @date 2021/3/20
  */
 @Data

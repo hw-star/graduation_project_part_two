@@ -22,7 +22,7 @@ import java.time.Duration;
 /**
  * @author huowei
  * @version 1.0.0
- * @description TODO
+ * @description redis缓存配置
  * @date 2021/4/4
  */
 @EnableCaching

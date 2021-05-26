@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * @author huowei
  * @version 1.0.0
- * @description TODO
+ * @description 上传图片控制层  OSS阿里云储存
  * @date 2021/2/19
  */
 @RestController
@@ -22,10 +22,15 @@ public class OssController {
     @Autowired
     private OssService ossService;
 
+    /**
+     * @description: 上传图片到阿里云OSS服务器
+     * @Param file: 图片文件
+     * @return: cn.simbrain.util.Result
+     */
     @PostMapping
     public Result addOssFile(MultipartFile file){
         if (file == null)
-            return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
+            return Result.failure(ResultCode.DATA_NONE);
         String url = ossService.addFileAvatar(file);
         return Result.success(url);
     }

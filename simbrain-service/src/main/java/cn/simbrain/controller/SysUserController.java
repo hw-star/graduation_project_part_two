@@ -53,16 +53,16 @@ public class SysUserController {
     @PostMapping("/login")
     public Result sysUserLogin(@RequestBody SysUserLogin sysUserLogin){
         if (StringUtils.isNullOrEmpty(sysUserLogin.getSysUserLoginId()) || StringUtils.isNullOrEmpty(sysUserLogin.getSysUserLoginPwd())){
-            return Result.failure(ResultCode.USER_LOGIN_ERROR);
+            return Result.failure(ResultCode.USER_LOGIN_NULL);
         }
         QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
         wrapper.eq("sys_id",sysUserLogin.getSysUserLoginId().trim());
         SysUser sysUser = sysUserService.getOne(wrapper);
         if (sysUser == null){
-            return Result.failure(ResultCode.USER_LOGIN_ERROR);
+            return Result.failure(ResultCode.USER_NOT_EXIST);
         }
         if (sysUser.getSysStop() == 1){
-            return Result.failure(ResultCode.USER_LOGIN_ERROR);
+            return Result.failure(ResultCode.USER_ACCOUNT_FORBIDDEN);
         }
         if (sysUserLogin.getSysUserLoginPwd().equals(sysUser.getSysPwd())) {
             String token = Jwt.createJwt(sysUser.getId().toString(), sysUserLogin.getSysUserLoginId(), true,sysUser.getSysName(), false);
@@ -122,7 +122,7 @@ public class SysUserController {
                                       HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         Page<SysUser> sysUserPage = new Page<>(current,limit);
         QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
         if (!"".equals(fuzzyquery)){
@@ -156,7 +156,7 @@ public class SysUserController {
     public Result deletedsysUser(@PathVariable String id, HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         boolean res = sysUserService.removeById(id);
         if (res)
             return Result.success();
@@ -175,13 +175,13 @@ public class SysUserController {
                               HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         SysUser sysUser = sysUserService.getById(id);
         sysUser.setSysStop(stateCode);
         boolean res = sysUserService.updateById(sysUser);
         if (res)
             return Result.success();
-        return Result.failure(ResultCode.INTERFACE_REQUEST_TIMEOUT);
+        return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
     }
 
     /**
@@ -193,7 +193,7 @@ public class SysUserController {
     public Result addsysUser(@RequestBody SysUser sysUser, HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         if (sysUser.getSysId() == null || sysUser.getSysEmail() == null || sysUser.getSysPwd() == null)
             return Result.failure(ResultCode.PARAM_NOT_COMPLETE);
         QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
@@ -220,12 +220,12 @@ public class SysUserController {
     public Result getsysUser(@PathVariable String id, HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
         wrapper.eq("id",id.trim());
         SysUser sysUser = sysUserService.getOne(wrapper);
         if (sysUser == null)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.USER_NOT_EXIST);
         return Result.success(sysUser);
     }
 
@@ -238,7 +238,7 @@ public class SysUserController {
     public Result updatesysUser(@RequestBody SysUser sysUser, HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         boolean res = sysUserService.updateById(sysUser);
         if (res)
             return Result.success();
@@ -254,9 +254,9 @@ public class SysUserController {
     public Result findPwd(@RequestBody FindPwd findPwd){
         SysUser sysUser = sysUserService.getOne(new QueryWrapper<SysUser>().eq("sys_id",findPwd.getId()));
         if (sysUser == null)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.USER_NOT_EXIST);
         if (!sysUser.getSysEmail().equals(findPwd.getEmail()))
-            return Result.failure(ResultCode.DATA_WRONG);
+            return Result.failure(ResultCode.PARAM_IS_INVALID);
         boolean sendState = emailProvide.createEmail(true,sysUser.getSysPwd(),findPwd.getId(),findPwd.getEmail());
         if (sendState)
             return Result.success();
@@ -273,7 +273,7 @@ public class SysUserController {
     public Result moreDeleteUsers(@RequestBody String[] ids,HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         boolean res = sysUserService.removeByIds(Arrays.asList(ids));
         if (res)
             return Result.success();

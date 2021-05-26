@@ -4,11 +4,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
-
 import java.util.Date;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
@@ -28,15 +25,17 @@ public class Jwt {
      */
     private static String secretKey = "SimBrain0510";
     /**
-     * 令牌有效时间(默认7天)
+     * 令牌有效时间(默认6天)
      */
-    private static long expires = 60 * 60 * 24 * 7;
+    private static long expires = 60 * 60 * 24 * 6;
 
     /**
-     * @description: 生成令牌
-     * @Param id: 账号
-     * @Param name: 名字
+     * @description: 生成Jwt令牌
+     * @Param id: 主键ID
+     * @Param userId: 账号
      * @Param isLogin: 是否登录
+     * @Param name: 名字
+     * @Param isUser: 是否普通用户
      * @return: java.lang.String
      */
     public static String createJwt(String id, String userId, Boolean isLogin, String name, boolean isUser){
@@ -55,10 +54,20 @@ public class Jwt {
         return jwtBuilder.compact();
     }
 
+    /**
+     * @description: 解析Token
+     * @Param jwtToken: token
+     * @return: io.jsonwebtoken.Claims
+     */
     public static Claims parseJwt(String jwtToken){
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken).getBody();
     }
 
+    /**
+     * @description: 验证token是否正确以及有效
+     * @Param jwtToken: token
+     * @return: boolean
+     */
     public static boolean checkToken(String jwtToken) {
         if(isEmpty(jwtToken)) return false;
         try {

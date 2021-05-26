@@ -1,7 +1,6 @@
 package cn.simbrain.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +11,7 @@ import java.io.Serializable;
 /**
  * @author huowei
  * @version 1.0.0
- * @description 日志信息  操作失败
+ * @description 日志信息实体  操作失败
  * @date 2021/2/15
  */
 @Data

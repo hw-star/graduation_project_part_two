@@ -11,7 +11,7 @@ import java.util.Date;
 /**
  * @author huowei
  * @version 1.0.0
- * @description TODO
+ * @description 志愿风采实体
  * @date 2021/5/26
  */
 @Data

@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * @author huowei
  * @version 1.0.0
- * @description 用户实体类
+ * @description 用户实体
  * @date 2021/2/12
  */
 @Data

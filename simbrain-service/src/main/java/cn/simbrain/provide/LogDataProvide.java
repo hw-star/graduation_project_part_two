@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * @author huowei
  * @version 1.0.0
- * @description TODO
+ * @description 管理员首页日志展示控制层
  * @date 2021/3/21
  */
 @RestController

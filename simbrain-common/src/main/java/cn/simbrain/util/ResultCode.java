@@ -21,6 +21,7 @@ public enum ResultCode {
 
     /* 用户错误：20001-29999*/
     USER_NOT_LOGIN(20001, "用户未登录"),
+    USER_LOGIN_NULL(20007,"账号或密码为空"),
     USER_LOGIN_ERROR(20002, "账号不存在或密码错误"),
     USER_ACCOUNT_FORBIDDEN(20003, "账号已被禁用"),
     USER_NOT_EXIST(20004, "用户不存在"),
@@ -40,6 +41,7 @@ public enum ResultCode {
     DATA_NONE(50001, "数据未找到"),
     DATA_WRONG(50002, "数据错误"),
     DATA_EXISTED(50003, "数据已存在"),
+    DATA_FULL(50004,"数据已满"),
 
 
     /* 接口错误：60001-69999 */

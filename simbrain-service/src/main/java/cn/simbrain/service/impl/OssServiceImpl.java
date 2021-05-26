@@ -13,14 +13,14 @@ import java.util.UUID;
 /**
  * @author huowei
  * @version 1.0.0
- * @description TODO
+ * @description OSS储存实现层
  * @date 2021/2/19
  */
 @Service
 public class OssServiceImpl implements OssService {
 
     /**
-     * @description: 设置头像
+     * @description: 上传图片并返回图片地址
      * @Param multipartFile: 头像文件
      * @return: java.lang.String
      */

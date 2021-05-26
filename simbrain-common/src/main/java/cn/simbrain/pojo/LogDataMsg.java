@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * @author huowei
  * @version 1.0.0
- * @description TODO
+ * @description 管理员首页日志展示实体
  * @date 2021/3/21
  */
 @Data

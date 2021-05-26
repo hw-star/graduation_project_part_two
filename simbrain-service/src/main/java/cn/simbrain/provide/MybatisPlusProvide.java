@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * @author huowei
  * @version 1.0.0
- * @description TODO
+ * @description Mybatis-plus 配置
  * @date 2021/2/18
  */
 @Configuration

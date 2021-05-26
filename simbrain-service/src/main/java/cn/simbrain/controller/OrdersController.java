@@ -25,7 +25,7 @@ import java.util.Map;
 /**
  * @author huowei
  * @version 1.0.0
- * @description 申请到活动的控制层
+ * @description 申请活动的控制层
  * @date 2021/2/12
  */
 @RestController
@@ -59,7 +59,7 @@ public class OrdersController {
                                     HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         Page<Orders> ordersPage = new Page<>(current,limit);
         QueryWrapper<Orders> wrapper = new QueryWrapper<>();
         if (!"".equals(fuzzyquery)){
@@ -89,7 +89,7 @@ public class OrdersController {
     public Result deletedOrders(@PathVariable String id, HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         boolean res = ordersService.removeById(id);
         if (res)
             return Result.success();
@@ -114,7 +114,7 @@ public class OrdersController {
             return Result.failure(ResultCode.DATA_EXISTED);
         int num = ordersService.count(new QueryWrapper<Orders>().eq("or_acid",acid));
         if (num > activity.getActNumber())
-            return Result.failure(ResultCode.DATA_WRONG);
+            return Result.failure(ResultCode.DATA_FULL);
         Orders or = new Orders();
         or.setOrAcid(acid);
         or.setOrEmail(user.getUserEmail());

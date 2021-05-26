@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * @author huowei
  * @version 1.0.0
- * @description TODO
+ * @description 政策文件控制层
  * @date 2021/5/22
  */
 @RestController
@@ -79,7 +79,7 @@ public class PolicyController {
             }else {
                 boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
                 if (!result)
-                    return Result.failure(ResultCode.DATA_NONE);
+                    return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
             }
         }
         Policy policy = policyService.getById(id);
@@ -103,7 +103,7 @@ public class PolicyController {
                                          HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         Page<Policy> policyPage = new Page<>(current,limit);
         QueryWrapper<Policy> wrapper = new QueryWrapper<>();
         if (!"".equals(fuzzyquery)){
@@ -134,13 +134,13 @@ public class PolicyController {
                                HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         Policy policy = policyService.getById(id);
         policy.setPoActive(stateCode);
         boolean res = policyService.updateById(policy);
         if (res)
             return Result.success();
-        return Result.failure(ResultCode.INTERFACE_REQUEST_TIMEOUT);
+        return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
     }
 
     /**
@@ -153,7 +153,7 @@ public class PolicyController {
     public Result deletedPolicy(@PathVariable String id, HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         boolean res = policyService.removeById(id);
         if (res)
             return Result.success();
@@ -169,7 +169,7 @@ public class PolicyController {
     public Result moreDeletePolicy(@RequestBody String[] ids, HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         boolean res = policyService.removeByIds(Arrays.asList(ids));
         if (res)
             return Result.success();
@@ -186,14 +186,14 @@ public class PolicyController {
     public Result addPolicy(@RequestBody Policy policy, HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         if (policy.getPoTitle() == null || policy.getPoContent() == null || policy.getPoSource() == null){
             return Result.failure(ResultCode.PARAM_NOT_COMPLETE);
         }
         boolean res = policyService.save(policy);
         if (res)
             return Result.success();
-        return Result.failure(ResultCode.PARAM_NOT_COMPLETE);
+        return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
     }
 
     /**
@@ -206,7 +206,7 @@ public class PolicyController {
     public Result updatePolicy(@RequestBody Policy policy, HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         boolean res = policyService.updateById(policy);
         if (res)
             return Result.success();

@@ -41,7 +41,7 @@ public class RoleController {
     public Result getRolesList(HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         List<Role> list = roleService.list();
         if (list == null){
             return Result.failure(ResultCode.DATA_NONE);
@@ -60,14 +60,14 @@ public class RoleController {
                                     HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         UpdateWrapper<OrderRoles> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("sor_id", sorId);
         OrderRoles roles = new OrderRoles();
         roles.setSorRoid(sorRoid);
         boolean res = orderRolesService.update(roles, updateWrapper);
         if (!res)
-            return Result.failure(ResultCode.DATA_WRONG);
+            return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
         return Result.success();
     }
 

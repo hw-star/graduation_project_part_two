@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * @author huowei
  * @version 1.0.0
- * @description TODO
+ * @description Excel控制层
  * @date 2021/3/20
  */
 @RestController
@@ -44,6 +44,13 @@ public class ExcelController {
     private OrderRolesService orderRolesService;
 
 
+    /**
+     * @description: 下载志愿活动人员名单
+     * @Param id: 主键ID
+     * @Param request: 请求
+     * @Param response: 回复
+     * @return: void
+     */
     @GetMapping("/getexcel/{id}")
     public void getExcelList(@PathVariable String id,HttpServletRequest request, HttpServletResponse response) throws ErrorException {
 //        boolean result = IsHaveRole.isHave(request,rolesGet,orderRolesService);

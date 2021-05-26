@@ -54,16 +54,16 @@ public class UserController {
     @PostMapping("/login")
     public Result userLogin(@RequestBody UserLogin userLogin){
         if (StringUtils.isNullOrEmpty(userLogin.getUserLoginId()) || StringUtils.isNullOrEmpty(userLogin.getUserLoginPwd())){
-            return Result.failure(ResultCode.USER_LOGIN_ERROR);
+            return Result.failure(ResultCode.USER_LOGIN_NULL);
         }
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("user_id",userLogin.getUserLoginId().trim());
         User user = userMapper.selectOne(wrapper);
         if (user == null){
-            return Result.failure(ResultCode.USER_LOGIN_ERROR);
+            return Result.failure(ResultCode.USER_NOT_EXIST);
         }
         if (user.getUserStop() == 1){
-            return Result.failure(ResultCode.USER_LOGIN_ERROR);
+            return Result.failure(ResultCode.USER_ACCOUNT_FORBIDDEN);
         }
         if (userLogin.getUserLoginPwd().equals(user.getUserPwd())){
             String token = Jwt.createJwt(user.getId().toString(),user.getUserId(),true,user.getUserName(),true);
@@ -116,7 +116,7 @@ public class UserController {
                                    HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         Page<User> userPage = new Page<>(current,limit);
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         if (!"".equals(fuzzyquery)){
@@ -151,7 +151,7 @@ public class UserController {
     public Result deletedUser(@PathVariable String id,HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         boolean res = userService.removeById(id);
         if (res)
             return Result.success();
@@ -169,7 +169,7 @@ public class UserController {
         if (token != null){
             boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
             if (!result)
-                return Result.failure(ResultCode.DATA_NONE);
+                return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         }
         if (user.getUserId() == null || user.getUserPwd() == null || user.getUserEmail() == null)
             return Result.failure(ResultCode.PARAM_NOT_COMPLETE);
@@ -193,10 +193,10 @@ public class UserController {
     public Result getUser(@PathVariable String id, HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         User user = userService.getById(id.trim());
         if (user == null)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.USER_NOT_EXIST);
         return Result.success(user);
     }
 
@@ -229,7 +229,7 @@ public class UserController {
     public Result updateTheUser(@RequestBody User user, HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("id", user.getId());
         boolean res = userService.update(user, updateWrapper);
@@ -250,13 +250,13 @@ public class UserController {
                            HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         User user = userService.getById(id);
         user.setUserStop(stateCode);
         boolean res = userService.updateById(user);
         if (res)
             return Result.success();
-        return Result.failure(ResultCode.INTERFACE_REQUEST_TIMEOUT);
+        return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
     }
 
     /**
@@ -268,9 +268,9 @@ public class UserController {
     public Result findPwd(@RequestBody FindPwd findPwd){
         User user = userService.getOne(new QueryWrapper<User>().eq("user_id",findPwd.getId()));
         if (user == null)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.USER_NOT_EXIST);
         if (!user.getUserEmail().equals(findPwd.getEmail()))
-            return Result.failure(ResultCode.DATA_WRONG);
+            return Result.failure(ResultCode.PARAM_IS_INVALID);
         boolean sendState = emailProvide.createEmail(false,user.getUserPwd(),findPwd.getId(),findPwd.getEmail());
         if (sendState)
             return Result.success();
@@ -286,7 +286,7 @@ public class UserController {
     public Result moreDeleteUsers(@RequestBody String[] ids,HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         boolean res = userService.removeByIds(Arrays.asList(ids));
         if (res)
             return Result.success();

@@ -1,7 +1,6 @@
 package cn.simbrain.mapper;
 
 import cn.simbrain.pojo.SysUser;
-import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
 

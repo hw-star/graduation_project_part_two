@@ -11,7 +11,7 @@ import javax.mail.internet.MimeMessage;
 /**
  * @author huowei
  * @version 1.0.0
- * @description 邮件控制层，处理密码丢失问题。
+ * @description 邮件控制层
  * @date 2021/2/13
  */
 @Controller
@@ -21,6 +21,14 @@ public class EmailProvide {
     @Autowired
     private JavaMailSenderImpl javaMailSender;
 
+    /**
+     * @description: 发送邮件
+     * @Param type: 类型 普通用户-管理员
+     * @Param userPwd: 密码
+     * @Param userId: 账号
+     * @Param userEmail: 邮箱
+     * @return: boolean
+     */
     public boolean createEmail(boolean type,String userPwd,String userId,String userEmail) {
         try {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();

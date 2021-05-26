@@ -14,6 +14,12 @@ import java.util.Date;
  */
 @Component
 public class MyMetaObjectHandler implements MetaObjectHandler {
+
+    /**
+     * @description: 自动添加创建以及更新时间
+     * @Param metaObject: 回调
+     * @return: void
+     */
     @Override
     public void insertFill(MetaObject metaObject) {
         this.setFieldValByName("actCreate",new Date(),metaObject);
@@ -31,6 +37,11 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 
     }
 
+    /**
+     * @description: 自动添加更新时间
+     * @Param metaObject: 回调
+     * @return: void
+     */
     @Override
     public void updateFill(MetaObject metaObject) {
         this.setFieldValByName("actUpdate",new Date(),metaObject);

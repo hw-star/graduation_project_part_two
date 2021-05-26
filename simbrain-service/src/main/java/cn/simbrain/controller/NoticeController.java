@@ -1,9 +1,7 @@
 package cn.simbrain.controller;
 
 import cn.simbrain.pojo.Notice;
-import cn.simbrain.provide.IsHaveRole;
 import cn.simbrain.service.NoticeService;
-import cn.simbrain.service.OrderRolesService;
 import cn.simbrain.util.Jwt;
 import cn.simbrain.util.Result;
 import cn.simbrain.util.ResultCode;
@@ -22,19 +20,15 @@ import java.util.Map;
 /**
  * @author huowei
  * @version 1.0.0
- * @description TODO
+ * @description 通知公告控制层
  * @date 2021/5/25
  */
 @RestController
 @RequestMapping("/notice")
 public class NoticeController {
 
-    String[] roles = new String[]{"1","4","6"};
-
     @Autowired
     private NoticeService noticeService;
-    @Autowired
-    private OrderRolesService orderRolesService;
 
     /**
      * @description: 条件带分页查询通知公告(管理员使用)
@@ -47,11 +41,7 @@ public class NoticeController {
     @GetMapping("noticelistbysys/{current}/{limit}")
     public Result getNoticeListPageBySys(@PathVariable long current,
                                          @PathVariable long limit,
-                                         @RequestParam(value = "fuzzyquery",required = false) String fuzzyquery,
-                                         HttpServletRequest request){
-//        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
-//        if (!result)
-//            return Result.failure(ResultCode.DATA_NONE);
+                                         @RequestParam(value = "fuzzyquery",required = false) String fuzzyquery){
         Page<Notice> noticePage = new Page<>(current,limit);
         QueryWrapper<Notice> wrapper = new QueryWrapper<>();
         if (!"".equals(fuzzyquery)){
@@ -87,10 +77,6 @@ public class NoticeController {
             boolean isUser = (boolean) claims.get("user");
             if (isUser){
                 num = 1;
-            }else {
-//                boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
-//                if (!result)
-//                    return Result.failure(ResultCode.DATA_NONE);
             }
         }
         Notice notice = noticeService.getById(id);
@@ -108,17 +94,13 @@ public class NoticeController {
      */
     @GetMapping("/shownotice/{id}/{stateCode}")
     public Result showNotice(@PathVariable String id,
-                             @PathVariable Integer stateCode,
-                             HttpServletRequest request){
-//        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
-//        if (!result)
-//            return Result.failure(ResultCode.DATA_NONE);
+                             @PathVariable Integer stateCode){
         Notice notice = noticeService.getById(id);
         notice.setNoActive(stateCode);
         boolean res = noticeService.updateById(notice);
         if (res)
             return Result.success();
-        return Result.failure(ResultCode.INTERFACE_REQUEST_TIMEOUT);
+        return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
     }
 
     /**
@@ -128,10 +110,7 @@ public class NoticeController {
      * @return: cn.simbrain.util.Result
      */
     @DeleteMapping("/deletenotice/{id}")
-    public Result deletedNotice(@PathVariable String id, HttpServletRequest request){
-//        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
-//        if (!result)
-//            return Result.failure(ResultCode.DATA_NONE);
+    public Result deletedNotice(@PathVariable String id){
         boolean res = noticeService.removeById(id);
         if (res)
             return Result.success();
@@ -144,10 +123,7 @@ public class NoticeController {
      * @return: cn.simbrain.util.Result
      */
     @PostMapping("/moredeletenotice")
-    public Result moreDeleteNotice(@RequestBody String[] ids, HttpServletRequest request){
-//        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
-//        if (!result)
-//            return Result.failure(ResultCode.DATA_NONE);
+    public Result moreDeleteNotice(@RequestBody String[] ids){
         boolean res = noticeService.removeByIds(Arrays.asList(ids));
         if (res)
             return Result.success();
@@ -161,17 +137,14 @@ public class NoticeController {
      * @return: cn.simbrain.util.Result
      */
     @PostMapping("/savenotice")
-    public Result addNotice(@RequestBody Notice notice, HttpServletRequest request){
-//        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
-//        if (!result)
-//            return Result.failure(ResultCode.DATA_NONE);
+    public Result addNotice(@RequestBody Notice notice){
         if (notice.getNoTitle() == null || notice.getNoContent() == null || notice.getNoTime() == null){
             return Result.failure(ResultCode.PARAM_NOT_COMPLETE);
         }
         boolean res = noticeService.save(notice);
         if (res)
             return Result.success();
-        return Result.failure(ResultCode.PARAM_NOT_COMPLETE);
+        return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
     }
 
     /**
@@ -181,10 +154,7 @@ public class NoticeController {
      * @return: cn.simbrain.util.Result
      */
     @PostMapping("/updatenotice")
-    public Result updateNotice(@RequestBody Notice notice, HttpServletRequest request){
-//        boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
-//        if (!result)
-//            return Result.failure(ResultCode.DATA_NONE);
+    public Result updateNotice(@RequestBody Notice notice){
         boolean res = noticeService.updateById(notice);
         if (res)
             return Result.success();

@@ -1,4 +1,5 @@
 cn\simbrain\handler\MyMetaObjectHandler.class
+cn\simbrain\pojo\Elegant.class
 cn\simbrain\pojo\ChartUser.class
 cn\simbrain\pojo\excel\ListPerson.class
 cn\simbrain\pojo\User.class
@@ -19,3 +20,4 @@ cn\simbrain\pojo\login\SysUserLogin.class
 cn\simbrain\pojo\Activity.class
 cn\simbrain\pojo\OrderRoles.class
 cn\simbrain\CommonApplication.class
+cn\simbrain\pojo\Notice.class

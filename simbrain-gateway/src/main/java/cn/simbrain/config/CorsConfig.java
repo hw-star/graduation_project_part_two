@@ -10,7 +10,7 @@ import org.springframework.web.util.pattern.PathPatternParser;
 /**
  * @author huowei
  * @version 1.0.0
- * @description TODO
+ * @description 解决跨域问题
  * @date 2021/2/25
  */
 @Configuration
@@ -18,7 +18,6 @@ public class CorsConfig {
 
     /**
      * @description: 处理跨域问题
-     *
      * @return: org.springframework.web.cors.reactive.CorsWebFilter
      */
     @Bean

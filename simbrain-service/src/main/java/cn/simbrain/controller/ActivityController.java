@@ -56,7 +56,7 @@ public class ActivityController {
             }else {
                 boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
                 if (!result)
-                    return Result.failure(ResultCode.DATA_NONE);
+                    return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
             }
         }
         if (activityBody != null)
@@ -74,7 +74,7 @@ public class ActivityController {
     public Result deletedActivity(@PathVariable String id, HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         boolean res = activityService.removeById(id);
         if (res)
             return Result.success();
@@ -90,7 +90,7 @@ public class ActivityController {
     public Result getActivity(@PathVariable String id, HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         Activity activity = activityService.getById(id);
         if (activity != null)
             return Result.success(activity);
@@ -106,7 +106,7 @@ public class ActivityController {
     public Result addActivity(@RequestBody Activity activity, HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         if (activity.getActName() == null || activity.getActDescription() == null || activity.getActNumber() == null){
             return Result.failure(ResultCode.PARAM_NOT_COMPLETE);
         }
@@ -115,7 +115,7 @@ public class ActivityController {
             if (res)
                 return Result.success();
         }
-        return Result.failure(ResultCode.PARAM_NOT_COMPLETE);
+        return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
     }
 
     /**
@@ -130,13 +130,13 @@ public class ActivityController {
                                HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         Activity activity = activityService.getById(id);
         activity.setActActive(stateCode);
         boolean res = activityService.updateById(activity);
         if (res)
             return Result.success();
-        return Result.failure(ResultCode.INTERFACE_REQUEST_TIMEOUT);
+        return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
     }
 
     /**
@@ -148,7 +148,7 @@ public class ActivityController {
     public Result updateActivity(@RequestBody Activity activity, HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         boolean res = activityService.updateById(activity);
         if (res)
             return Result.success();
@@ -164,7 +164,7 @@ public class ActivityController {
     public Result moreDeleteActivity(@RequestBody String[] ids,HttpServletRequest request){
         boolean result = IsHaveRole.isHave(request,roles,orderRolesService);
         if (!result)
-            return Result.failure(ResultCode.DATA_NONE);
+            return Result.failure(ResultCode.PERMISSION_NO_ACCESS);
         boolean res = activityService.removeByIds(Arrays.asList(ids));
         if (res)
             return Result.success();

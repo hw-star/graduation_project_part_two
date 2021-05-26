@@ -10,7 +10,7 @@ import java.io.Serializable;
 /**
  * @author huowei
  * @version 1.0.0
- * @description 用户申请活动的信息
+ * @description 用户申请活动信息实体
  * @date 2021/2/12
  */
 @Data

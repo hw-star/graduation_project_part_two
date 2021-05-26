@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 /**
  * @author huowei
  * @version 1.0.0
- * @description 日志服务层
+ * @description 日志-成功服务层
  * @date 2021/2/15
  */
 @Service

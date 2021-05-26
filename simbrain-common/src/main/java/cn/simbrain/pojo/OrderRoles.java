@@ -12,7 +12,7 @@ import java.io.Serializable;
 /**
  * @author huowei
  * @version 1.0.0
- * @description TODO
+ * @description 角色-管理员 关系实体
  * @date 2021/3/19
  */
 @Data

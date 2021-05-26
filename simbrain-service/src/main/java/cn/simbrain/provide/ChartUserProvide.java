@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author huowei
  * @version 1.0.0
- * @description TODO
+ * @description 管理员首页 用户、管理员、活动数据 控制层
  * @date 2021/3/20
  */
 @RestController
@@ -28,6 +28,10 @@ public class ChartUserProvide {
     @Autowired
     private RoleService roleService;
 
+    /**
+     * @description: 获取 用户、管理员、活动 数据量
+     * @return: cn.simbrain.util.Result
+     */
     @GetMapping("/getchart")
     public Result getChartUser(){
         ChartUser chartUser = new ChartUser();

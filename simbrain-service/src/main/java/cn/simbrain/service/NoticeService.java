@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 /**
  * @author huowei
  * @version 1.0.0
- * @description TODO
+ * @description 通知公告服务层
  * @date 2021/5/25
  */
 public interface NoticeService extends IService<Notice> {
